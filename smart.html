@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APATT — INSTANT TONE RACK</title>
+<meta name="description" content="あなたは、音を選ぶ。APATTが、使える音にする。5つの処理をひとつのラックに。macOS / AU・VST3。無料版あり。">
+<style>
+:root{
+  --gold:#c9a86a; --gold-lt:#e8d2a0; --ink:#0d0d0f; --panel:#141417;
+  --panel2:#1b1b1f; --line:#2a2a30; --text:#e8e6e2; --dim:#9a968e; --red:#d0603f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased;font-size:14px}
+.wrap{max-width:940px;margin:0 auto;padding:0 18px}
+a{color:var(--gold);text-decoration:none}
+
+/* top store block */
+.store{display:grid;grid-template-columns:1fr 300px;gap:18px;padding:28px 0 22px}
+@media(max-width:760px){.store{grid-template-columns:1fr}}
+.media img{width:100%;border-radius:8px;border:1px solid var(--line)}
+.side h1{font-size:26px;letter-spacing:.14em;color:var(--gold-lt)}
+.side .tg{font-size:10px;letter-spacing:.3em;color:var(--gold);margin-bottom:12px}
+.side p.pitch{font-size:13px;color:var(--dim);margin:10px 0 14px;line-height:1.9}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{font-size:11px;padding:3px 10px;border-radius:3px;background:var(--panel2);color:var(--dim);border:1px solid var(--line)}
+.buy{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px}
+.buy .r{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.buy .nm{font-size:13.5px;font-weight:600;color:var(--gold-lt)}
+.buy .pr{font-size:15px;font-weight:700;white-space:nowrap}
+.buy .note{font-size:11px;color:var(--dim);margin-top:2px}
+.btn{display:inline-block;padding:8px 16px;border-radius:6px;font-size:12.5px;letter-spacing:.04em;
+  cursor:pointer;border:none;font-family:inherit;white-space:nowrap}
+.btn-p{background:linear-gradient(180deg,var(--gold-lt),var(--gold));color:#241d10;font-weight:700}
+.btn-g{border:1px solid var(--line);background:none;color:var(--text)}
+.btn.off{opacity:.45;pointer-events:none}
+
+section{padding:34px 0;border-top:1px solid var(--line)}
+h2{font-size:16px;letter-spacing:.18em;color:var(--gold);margin-bottom:16px;font-weight:600}
+
+/* demos compact */
+.demos{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.d{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+.d h3{font-size:14px;color:var(--gold-lt);margin-bottom:6px}
+.d p{font-size:12.5px;color:var(--dim);margin-bottom:12px}
+.abbtn{padding:7px 14px;border-radius:6px;border:1px solid var(--line);background:var(--panel2);
+  color:var(--text);cursor:pointer;font-family:inherit;font-size:12px;margin-right:6px}
+.abbtn.on{background:var(--gold);color:#241d10;border-color:var(--gold);font-weight:700}
+
+/* rack rows */
+.row{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.row .nm{font-size:13.5px;letter-spacing:.1em;color:var(--gold-lt);font-weight:600}
+.row .bd{font-size:13px;color:var(--dim)}
+.row .bd b{color:var(--text);font-weight:600;display:block;margin-bottom:2px}
+.vb{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 12px;border-radius:14px;
+  border:1px solid var(--line);background:none;color:var(--gold);cursor:pointer;font-family:inherit;font-size:11.5px}
+.voice{display:none;margin-top:10px;padding:12px 14px;border-radius:8px;background:var(--panel2);
+  border-left:3px solid var(--red);font-size:12.5px;line-height:1.95}
+.voice.open{display:block}
+.voice .sig{display:block;text-align:right;color:var(--dim);font-size:10px;margin-top:6px;letter-spacing:.2em}
+
+/* feature media rows */
+.fm{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.fm{grid-template-columns:1fr}}
+.f{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+.f h3{font-size:13.5px;color:var(--gold-lt);margin-bottom:6px}
+.f p{font-size:12.5px;color:var(--dim)}
+.ph{margin-top:12px;border:1px dashed var(--line);border-radius:6px;color:var(--dim);
+  font-size:10px;letter-spacing:.2em;text-align:center;padding:30px 8px}
+.f img{margin-top:12px;width:100%;border-radius:6px;border:1px solid var(--line)}
+
+/* compare table */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:8px;border-bottom:1px solid var(--line);text-align:center}
+td:first-child,th:first-child{text-align:left;color:var(--dim)}
+th{color:var(--gold-lt)}
+.y{color:var(--gold)}
+.tsc{overflow-x:auto}
+
+details{border-bottom:1px solid var(--line);padding:10px 2px}
+summary{cursor:pointer;font-size:13px;font-weight:600;list-style:none;position:relative;padding-right:22px}
+summary::after{content:"+";position:absolute;right:2px;color:var(--gold)}
+details[open] summary::after{content:"−"}
+details .in{margin-top:8px;font-size:12.5px;color:var(--dim);line-height:1.9}
+footer{padding:30px 0 50px;color:var(--dim);font-size:11px}
+footer a{color:var(--dim);margin-right:14px}
+.fine{font-size:11px;color:var(--dim);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="store">
+    <div class="media">
+      <img src="assets/apatt-rack.png" alt="APATT">
+      <div class="demos" style="margin-top:12px">
+        <div class="d"><h3>ピアノ</h3><p>今ある音源を、もっと使える音へ。</p>
+          <span class="ab" data-base="assets/audio/piano"><button class="abbtn dry">ORIGINAL</button><button class="abbtn wet">APATT</button></span></div>
+        <div class="d"><h3>ボーカル</h3><p>歌声を、埋もれさせない。</p>
+          <span class="ab" data-base="assets/audio/vocal"><button class="abbtn dry">ORIGINAL</button><button class="abbtn wet">APATT</button></span></div>
+        <div class="d"><h3>マスター</h3><p>作った曲を、人に聴かせる音へ。</p>
+          <span class="ab" data-base="assets/audio/master"><button class="abbtn dry">ORIGINAL</button><button class="abbtn wet">APATT</button></span></div>
+      </div>
+    </div>
+    <div class="side">
+      <h1>APATT</h1>
+      <div class="tg">INSTANT TONE RACK</div>
+      <p class="pitch"><strong style="color:var(--text)">あなたは、音を選ぶ。APATTが、使える音にする。</strong><br>
+      音量・低域・密度・広がり・ピーク。いつも必要になる5つの処理を、ひとつのラックに。挿して、プリセットを選んで、少し触るだけ。</p>
+      <div class="chips">
+        <span class="chip">macOS</span><span class="chip">AU / VST3</span>
+        <span class="chip">3バンド・ダイナミクス</span><span class="chip">プリセット67本</span><span class="chip">スキン16種</span>
+      </div>
+      <div class="buy"><div class="r"><span class="nm">APATT 1U</span><span class="pr">FREE</span></div>
+        <div class="note">心臓部をそのまま。期限なし。</div>
+        <div style="margin-top:8px"><a class="btn btn-g off">ダウンロード(準備中)</a></div></div>
+      <div class="buy"><div class="r"><span class="nm">APATT ARTIST</span><span class="pr">¥5,980</span></div>
+        <div class="note">5段フルラック+24プリセット</div>
+        <div style="margin-top:8px"><a class="btn btn-p off">近日発売</a></div></div>
+      <div class="buy" style="border-color:var(--gold)"><div class="r"><span class="nm">APATT PRO</span><span class="pr">¥12,800</span></div>
+        <div class="note">67プリセット+より細かなコントロール</div>
+        <div style="margin-top:8px"><a class="btn btn-p off">近日発売</a></div></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>SIGNAL CHAIN — 5段</h2>
+    <div class="row"><div class="nm">AUTO TRIM</div><div class="bd"><b>もう赤いメーターとにらめっこしなくて、よくなりました。</b>ピークを超えてくる素材も、“自動”で適切な音まで下げます。</div></div>
+    <div class="row"><div class="nm">APA-EQ</div><div class="bd"><b>低域の濁りが、消えます。</b>音の芯を殺さないぎりぎりまで削って、抜け感はAIRで。</div></div>
+    <div class="row"><div class="nm">APATT<br><span style="font-size:10px;color:var(--dim)">3-BAND DYNAMICS</span></div>
+      <div class="bd"><b>音作りは、この場所で決める。</b>派手にも、上品にも。APATTの心臓部です。
+      <br><button class="vb" type="button">✍ APAZZIの声</button>
+      <div class="voice">僕はEQ以上に、マルチバンドコンプで音作りをしてきました。深く突っ込んで、低・中・高を整えて、小さい音を前へ出す。<span class="sig">— APAZZI</span></div></div></div>
+    <div class="row"><div class="nm">APA-S2</div><div class="bd"><b>音の芯を残して、自然に広げる。</b>歌が、シンセが、埋もれなくなります。マスターにも。
+      <br><button class="vb" type="button">✍ APAZZIの声</button>
+      <div class="voice">アーティストの言葉を、はっきり届けたい。だから僕はボーカルを大きめに作ります。広げ方さえ正しければ、ボーカルは浮かせずに目立たせられる。<span class="sig">— APAZZI</span></div></div></div>
+    <div class="row" style="border-bottom:none"><div class="nm">APA-L2</div><div class="bd"><b>攻めても、割れない。</b>回すだけで音圧が上がる、TRUE PEAK検出つきリミッター。
+      <br><button class="vb" type="button">✍ APAZZIの声</button>
+      <div class="voice">原因不明の音割れ。納品する曲がバリバリ言っていたら、仕事になりません。音割れが大嫌いな僕が、自分のために作った最後の砦です。<span class="sig">— APAZZI</span></div></div></div>
+  </section>
+
+  <section>
+    <h2>AUTOMATION</h2>
+    <div class="fm">
+      <div class="f"><h3>オートパイロット</h3><p>サビをループしてAUTOランプを押すだけ。ちょうどいい音圧に着地して、一番おいしいところを憶えて、離さない。</p><div class="ph">AUTO PILOT GIF(準備中)</div></div>
+      <div class="f"><h3>火の見張り</h3><p>音が焦げ始めた瞬間、原因のノブに火種が灯る。橙は「ギリギリ」、赤は「クリップ中!」。耳より先に、目でわかる。</p><div class="ph">FIRE WATCH GIF(準備中)</div></div>
+      <div class="f"><h3>PRESET BANKS</h3><p>ジャンル×楽器で選べる、実案件由来のプリセット(PRO 67本/ARTIST 24本)。ファイルひとつで仲間に渡せます。</p><img src="assets/presets.png" alt=""></div>
+      <div class="f"><h3>16 SKINS</h3><p>無料版を含む全エディションで着せ替え。音は変わりません、気分だけ変わります。</p><img src="assets/skins.gif" alt=""></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>EDITIONS</h2>
+    <p style="font-size:12.5px;color:var(--dim);margin-bottom:12px">音質はすべて同じです。違うのは「どこまで細かく触れるか」だけ。</p>
+    <div class="tsc"><table>
+      <tr><th></th><th>APATT<br><span style="font-size:10px;color:var(--dim)">無料版</span></th><th>ARTIST</th><th>PRO</th></tr>
+      <tr><td>価格</td><td>無料</td><td>¥5,980</td><td>¥12,800</td></tr>
+      <tr><td>3バンド・ダイナミクス / スキン16種</td><td class="y">●</td><td class="y">●</td><td class="y">●</td></tr>
+      <tr><td>AUTO TRIM / APA-EQ / APA-S2 / APA-L2</td><td>—</td><td class="y">●</td><td class="y">●</td></tr>
+      <tr><td>オートパイロット / 火の見張り</td><td>—</td><td class="y">●</td><td class="y">●</td></tr>
+      <tr><td>プリセット(実案件由来)</td><td>—</td><td>24本</td><td>67本</td></tr>
+      <tr><td>クロスオーバー可変 / モード切替 / PRESET BANKS</td><td>—</td><td>—</td><td class="y">●</td></tr>
+    </table></div>
+    <p class="fine">macOS(Apple Silicon / Intel)、AU・VST3。有料版は1ライセンス=ご本人のMac台数無制限。</p>
+  </section>
+
+  <section>
+    <h2>DEVELOPER</h2>
+    <p style="font-size:13px"><b>2,000万枚の現場で磨かれた判断を、あなたのDAWへ。</b><br>
+    <span style="color:var(--dim);font-size:12.5px">乃木坂46、AKB48、イコノイジョイなど、参加作品累計2,000万枚超。グラミー賞選出作品、日本レコード大賞受賞作品を手がける編曲家APAZZIが、実際の制作と同じ基準ですべて調整。</span></p>
+    <button class="vb" type="button">✍ APATTを作った理由(本人の声)</button>
+    <div class="voice">
+      僕は20年近く、J-POPの現場で曲を作ってきました。どの曲でも、どの楽器でも、必ず同じ手順を積み上げてきました。トリムでゲインを整えて、EQで低域の濁りを削って、マルチバンドコンプで音を作る。ボーカルは浮かせずに前へ。最後にリミッターで、絶対に割らない。<br><br>
+      「派手にするだけ」と思われがちな、いわゆる“OTT系”のマルチバンドコンプを、僕はずっと音作りの道具として使ってきました。手に馴染むまで使い込んだ道具は、好きな音まで最短で連れて行ってくれます。邪道と言われても、僕の音はここから生まれています。<br><br>
+      APATTは、その手順をそのまま1台に封じ込めたプラグインです。段の並びは、僕が毎日やってきた順番のまま。オートパイロットも火の見張りも、音割れが大嫌いな僕が自分のために作った安全装置です。<br><br>
+      挿して、選んで、少し触るだけで、プロの現場の音に届く。そこまでの近道として、僕の20年を使ってください。君の曲を、もう一歩前へ進める手助けになると思います。
+      <span class="sig">— APAZZI</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>FAQ</h2>
+    <details><summary>商用利用できますか?</summary><div class="in">もちろんです。権利はすべてあなたに帰属します。無料版でも同じです。</div></details>
+    <details><summary>Windowsでは使えますか?</summary><div class="in">現在はmacOS版(AU・VST3)のみ。Windows版はご要望の声を見ながら検討中です。</div></details>
+    <details><summary>体験版はありますか?</summary><div class="in">無料版「APATT」が体験版を兼ねています。期限なし、そのままずっと使えます。</div></details>
+    <details><summary>ライセンスは何台まで?</summary><div class="in">ご本人のMacなら台数無制限。スタジオと自宅の両方でどうぞ。</div></details>
+    <details><summary>ネット接続や登録は必要?</summary><div class="in">不要です。ライセンスを一度読み込めば、以降オフラインで動作します。</div></details>
+    <details><summary>OTT系と何が違う?</summary><div class="in">3バンド・ダイナミクスを中心に、前後の処理(整音・EQ・ステレオ・リミッター)まで1台に。深く突っ込んでも荒れにくい設計、センターを保つステレオ、割れないAUTOリミッター。</div></details>
+    <details><summary>プリセットは共有できる?</summary><div class="in">ファイルひとつで渡せて、画面に放り込むだけで読めます。エディションが違ってもOK。</div></details>
+    <details><summary>返金は?</summary><div class="in">条件を満たす場合は14日以内で対応します。<a href="refund.html">返金ポリシー</a>参照。購入前に無料版で動作確認を。</div></details>
+  </section>
+
+  <section style="text-align:center;border-top:1px solid var(--line)">
+    <p style="font-size:17px;color:var(--gold-lt);font-weight:600;letter-spacing:.04em">音作りで、一日を終わらせない。</p>
+    <p style="font-size:12.5px;color:var(--dim);margin:8px 0 18px">選んだ音を、使える音へ。作った曲を、聴かせられる音へ。</p>
+    <a class="btn btn-p off">無料版をダウンロード(準備中)</a>
+  </section>
+
+  <footer>
+    <a href="https://x.com/APAZZI_SKK47">X</a><a href="https://www.kurashin.co">Official Web</a>
+    <a href="eula.html">EULA</a><a href="privacy.html">プライバシー</a>
+    <a href="refund.html">返金</a><a href="tokushoho.html">特商法表記</a>
+    <p class="fine">© 2026 APAZZI / kurashin.co APATT is a trademark of APAZZI.</p>
+  </footer>
+</div>
+
+<script>
+document.querySelectorAll('.vb').forEach(function(b){
+  b.addEventListener('click',function(){var v=b.nextElementSibling;if(v)v.classList.toggle('open');});
+});
+document.querySelectorAll('.ab').forEach(function(box){
+  var base=box.getAttribute('data-base');
+  var dry=new Audio(base+'_dry.mp3'), wet=new Audio(base+'_apatt.mp3');
+  var bd=box.querySelector('.dry'), bw=box.querySelector('.wet');
+  function off(){document.querySelectorAll('.abbtn').forEach(function(x){x.classList.remove('on')});dry.pause();wet.pause();}
+  bd.addEventListener('click',function(){var w=bd.classList.contains('on');off();
+    if(!w){dry.currentTime=wet.currentTime||0;dry.play().catch(function(){});bd.classList.add('on');}});
+  bw.addEventListener('click',function(){var w=bw.classList.contains('on');off();
+    if(!w){wet.currentTime=dry.currentTime||0;wet.play().catch(function(){});bw.classList.add('on');}});
+});
+</script>
+</body>
+</html>
