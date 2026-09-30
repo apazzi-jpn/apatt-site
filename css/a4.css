@@ -742,3 +742,7 @@ html.gate-reveal #skin ~ :not(script){animation:gateIn 1.1s cubic-bezier(.2,.7,.
 /* 260930 APA-MIX: the big line says 全自動; the how-to goes below it in small type */
 #apamix .lead.mix-lead{margin-bottom:12px}
 #apamix .mix-how{max-width:640px;margin:0 auto clamp(30px,3.8vw,46px)}
+
+/* 260930 20:05 owner「無料ダウンロードのボタンが他の2つとずれてる」: the note under the button is 2 lines on 1U and 3 on the others,
+   and the button sits on top of it → side by side, the notes get the same height so the three buttons line up */
+@media (min-width:880px){.ed .btn + .fine{min-height:5.4em;min-height:3lh}}
