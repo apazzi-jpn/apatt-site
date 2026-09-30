@@ -1,0 +1,161 @@
+{
+ "made": "2026-09-29",
+ "files": {
+  "syn_over": {
+   "lufs_i_file": -13.6,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -3.0,
+   "duration_s": 19.587,
+   "m4a": "syn_over.m4a",
+   "mp3": "syn_over.mp3",
+   "peaks": "syn_over.peaks.json"
+  },
+  "syn_trim": {
+   "lufs_i_file": -18.5,
+   "sample_peak_dbfs_file": -7.9,
+   "true_peak_dbtp_file": -7.9,
+   "duration_s": 19.587,
+   "m4a": "syn_trim.m4a",
+   "mp3": "syn_trim.mp3",
+   "peaks": "syn_trim.peaks.json"
+  },
+  "mx_vo_bypass": {
+   "lufs_i_file": -22.2,
+   "sample_peak_dbfs_file": -8.03,
+   "true_peak_dbtp_file": -8.0,
+   "duration_s": 27.586,
+   "m4a": "mx_vo_bypass.m4a",
+   "mp3": "mx_vo_bypass.mp3",
+   "peaks": "mx_vo_bypass.peaks.json"
+  },
+  "mx_vo_before": {
+   "lufs_i_file": -22.3,
+   "sample_peak_dbfs_file": -8.72,
+   "true_peak_dbtp_file": -8.6,
+   "duration_s": 27.586,
+   "m4a": "mx_vo_before.m4a",
+   "mp3": "mx_vo_before.mp3",
+   "peaks": "mx_vo_before.peaks.json"
+  },
+  "mx_vo_after": {
+   "lufs_i_file": -10.2,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -3.0,
+   "duration_s": 27.586,
+   "m4a": "mx_vo_after.m4a",
+   "mp3": "mx_vo_after.mp3",
+   "peaks": "mx_vo_after.peaks.json"
+  },
+  "mx_song_bypass": {
+   "lufs_i_file": -14.2,
+   "sample_peak_dbfs_file": -3.11,
+   "true_peak_dbtp_file": -3.1,
+   "duration_s": 32.621,
+   "m4a": "mx_song_bypass.m4a",
+   "mp3": "mx_song_bypass.mp3",
+   "peaks": "mx_song_bypass.peaks.json"
+  },
+  "mx_song_before": {
+   "lufs_i_file": -14.3,
+   "sample_peak_dbfs_file": -3.12,
+   "true_peak_dbtp_file": -3.1,
+   "duration_s": 32.621,
+   "m4a": "mx_song_before.m4a",
+   "mp3": "mx_song_before.mp3",
+   "peaks": "mx_song_before.peaks.json"
+  },
+  "mx_song_after": {
+   "lufs_i_file": -8.2,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -2.9,
+   "duration_s": 32.621,
+   "m4a": "mx_song_after.m4a",
+   "mp3": "mx_song_after.mp3",
+   "peaks": "mx_song_after.peaks.json"
+  },
+  "mx_inst_bypass": {
+   "lufs_i_file": -15.5,
+   "sample_peak_dbfs_file": -3.71,
+   "true_peak_dbtp_file": -3.5,
+   "duration_s": 46.0,
+   "m4a": "mx_inst_bypass.m4a",
+   "mp3": "mx_inst_bypass.mp3",
+   "peaks": "mx_inst_bypass.peaks.json"
+  },
+  "mx_inst_before": {
+   "lufs_i_file": -15.6,
+   "sample_peak_dbfs_file": -3.09,
+   "true_peak_dbtp_file": -3.1,
+   "duration_s": 46.0,
+   "m4a": "mx_inst_before.m4a",
+   "mp3": "mx_inst_before.mp3",
+   "peaks": "mx_inst_before.peaks.json"
+  },
+  "mx_inst_after": {
+   "lufs_i_file": -8.7,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -2.7,
+   "duration_s": 46.0,
+   "m4a": "mx_inst_after.m4a",
+   "mp3": "mx_inst_after.mp3",
+   "peaks": "mx_inst_after.peaks.json"
+  },
+  "mx_piano_bypass": {
+   "lufs_i_file": -25.4,
+   "sample_peak_dbfs_file": -10.74,
+   "true_peak_dbtp_file": -10.7,
+   "duration_s": 38.4,
+   "m4a": "mx_piano_bypass.m4a",
+   "mp3": "mx_piano_bypass.mp3",
+   "peaks": "mx_piano_bypass.peaks.json"
+  },
+  "mx_piano_before": {
+   "lufs_i_file": -25.5,
+   "sample_peak_dbfs_file": -10.31,
+   "true_peak_dbtp_file": -10.3,
+   "duration_s": 38.4,
+   "m4a": "mx_piano_before.m4a",
+   "mp3": "mx_piano_before.mp3",
+   "peaks": "mx_piano_before.peaks.json"
+  },
+  "mx_piano_after": {
+   "lufs_i_file": -9.2,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -2.9,
+   "duration_s": 38.4,
+   "m4a": "mx_piano_after.m4a",
+   "mp3": "mx_piano_after.mp3",
+   "peaks": "mx_piano_after.peaks.json"
+  },
+  "mx_synth_bypass": {
+   "lufs_i_file": -25.9,
+   "sample_peak_dbfs_file": -14.96,
+   "true_peak_dbtp_file": -15.0,
+   "duration_s": 33.2,
+   "m4a": "mx_synth_bypass.m4a",
+   "mp3": "mx_synth_bypass.mp3",
+   "peaks": "mx_synth_bypass.peaks.json"
+  },
+  "mx_synth_before": {
+   "lufs_i_file": -26.0,
+   "sample_peak_dbfs_file": -15.23,
+   "true_peak_dbtp_file": -15.2,
+   "duration_s": 33.2,
+   "m4a": "mx_synth_before.m4a",
+   "mp3": "mx_synth_before.mp3",
+   "peaks": "mx_synth_before.peaks.json"
+  },
+  "mx_synth_after": {
+   "lufs_i_file": -11.2,
+   "sample_peak_dbfs_file": -3.0,
+   "true_peak_dbtp_file": -2.8,
+   "duration_s": 33.2,
+   "m4a": "mx_synth_after.m4a",
+   "mp3": "mx_synth_after.mp3",
+   "peaks": "mx_synth_after.peaks.json"
+  }
+ },
+ "trim_display": {
+  "display_offset_db": 6.9
+ }
+}
