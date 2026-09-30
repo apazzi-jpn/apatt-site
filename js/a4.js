@@ -1470,6 +1470,65 @@
     openFor();
   })();
 
+  /* ================= 5d) 260930 19:35 owner: three places the scroll "catches" for a moment (a brake, not a stop), and a sparkle =================
+     「忙しい人のために APA-MIX を用意しました」「やりすぎたら、画面が先に教えてくれます」「あなたに合う APATT を」:
+     going down, when one of these headings reaches the upper middle of the screen, the wheel moves the page only a little for 0.75 s
+     (うっと止まる感じ), then it is free again; it re-arms once the heading has left the screen. Touch screens: a soft snap (CSS).
+     The APA-MIX heading also sparkles when it comes into view (安心してください、のキラキラ). Runs with reduced motion too (the owner asked). */
+  (function () {
+    var heads = ['#mix-h', '#fire-h', '#ed-h'].map(function (q) { return $(q); }).filter(Boolean);
+    if (!heads.length) return;
+    // 260930 19:50 owner「トラックボールだと全然引っかからない・もっと引っかかっていい(でも皆にとって引っかかる位)」:
+    //   the brake is now a budget, not a ratio: for 1.2 s after the catch the page moves at most ~40 px in all, however hard the wheel / trackball goes
+    var armed = heads.map(function () { return true; }), until = 0, budget = 0;
+    function hit() {
+      var vh = window.innerHeight;
+      for (var i = 0; i < heads.length; i++) {
+        if (!armed[i]) continue;
+        var r = heads[i].getBoundingClientRect();
+        if (r.top < vh * 0.6 && r.top > vh * 0.16 && r.height > 0) return i;
+      }
+      return -1;
+    }
+    window.addEventListener('scroll', function () {
+      var vh = window.innerHeight;
+      heads.forEach(function (h, i) { var r = h.getBoundingClientRect(); if (r.top > vh || r.bottom < 0) armed[i] = true; });
+    }, { passive: true });
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.deltaY <= 0 || (typeof Gate !== 'undefined' && Gate.on)) return;
+      var now = performance.now();
+      if (now > until) {
+        var i = hit(); if (i < 0) return;
+        armed[i] = false; until = now + 1200; budget = 40;
+        if (heads[i].id === 'mix-h') sparkle(heads[i]);
+      }
+      e.preventDefault();
+      var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
+      var step = Math.min(budget, 6, Math.max(0.5, d * 0.08));
+      if (step > 0) { budget -= step; window.scrollBy(0, step); }
+    }, { passive: false });
+    // the sparkle: little stars around the words that twinkle and fade, and a soft glow on the heading
+    var lastSp = 0;
+    function sparkle(h) {
+      var now = Date.now(); if (now - lastSp < 4000) return; lastSp = now;
+      h.classList.add('spk-host'); h.classList.remove('spk-glow'); void h.offsetWidth; h.classList.add('spk-glow');
+      var r = h.getBoundingClientRect(), n = 14;
+      for (var k = 0; k < n; k++) {
+        var st = document.createElement('span'); st.className = 'spk'; st.setAttribute('aria-hidden', 'true'); st.textContent = k % 3 ? '✦' : '✧';
+        st.style.left = (4 + Math.random() * 92) + '%'; st.style.top = (-12 + Math.random() * 110) + '%';
+        st.style.fontSize = (10 + Math.random() * 16) + 'px';
+        st.style.animationDelay = (Math.random() * 0.9).toFixed(2) + 's';
+        h.appendChild(st);
+      }
+      setTimeout(function () { $$('.spk', h).forEach(function (x) { x.remove(); }); h.classList.remove('spk-glow'); }, 3000);
+    }
+    // it also sparkles when it simply comes into view (touch, keys, links)
+    var mh = $('#mix-h');
+    if (mh && hasIO) new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio > 0.6) sparkle(mh); });
+    }, { threshold: [0.6], rootMargin: '0px 0px -42% 0px' }).observe(mh);   // when it reaches the upper middle (the same moment as the brake)
+  })();
+
   /* ================= 6) Quiet fade-in ================= */
   (function () {
     var els = $$('.rv');
