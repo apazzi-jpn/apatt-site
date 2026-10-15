@@ -1586,3 +1586,17 @@
   // for checking in the browser console only
   window.APATT_A4 = { clips: clips, abs: abs, skin: function () { return chosen; }, skinMeta: skinMeta };
 })();
+
+/* 261015 動画の欄: 表紙(button)を押したら、同じ大きさの枠に入れ替えてその場で再生(button の中に操作つきの動画を入れない)。
+   自分の動画は video/sns/・紹介の回は YouTube の nocookie。ほかに鳴っている自分の動画は止める */
+(function () {
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('#videos .vd-play'); if (!b) return;
+    document.querySelectorAll('#videos video').forEach(function (v) { v.pause(); });
+    var box = document.createElement('div'); box.className = 'vd-play vd-on';
+    var v;
+    if (b.dataset.yt) { v = document.createElement('iframe'); v.src = b.dataset.src; v.title = b.getAttribute('aria-label') || ''; v.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; v.allowFullscreen = true; v.style.border = '0'; }
+    else { v = document.createElement('video'); v.src = b.dataset.src; v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = 'auto'; }
+    box.appendChild(v); b.replaceWith(box);
+  });
+})();
