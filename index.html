@@ -15,6 +15,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@APAZZI_SKK47">
 <script>document.documentElement.classList.add('js');/* 260930 owner: first visit = choose a skin before going on (the rest of the page opens when one is chosen). Not for a saved choice, a link to a place in the page, a visitor from a search result (text links), one who already went past it in this visit, or crawlers. If a4.js never starts, the page opens by itself */(function(d){try{var h=location.hash,ua=navigator.userAgent||'';var ss=0;try{ss=sessionStorage.getItem('apatt-a4-open')}catch(e){}if(/[?&]gate=1\b/.test(location.search)){d.classList.add('skin-gated');return}if(!localStorage.getItem('apatt-a4-skin')&&!ss&&(!h||h==='#skin'||h==='#top')&&!/bot|crawl|spider|slurp|preview|facebookexternalhit|embed|lighthouse/i.test(ua)&&!/^https?:\/\/([^\/]+\.)?(google|bing|yahoo|duckduckgo|yandex|naver|ecosia)\./i.test(document.referrer||''))d.classList.add('skin-gated')}catch(e){}setTimeout(function(){if(!window.APATT_A4_OK)d.classList.remove('skin-gated')},6000)})(document.documentElement);</script>
+<!-- 261016 Windows 版のスイッチ(ここだけ): ready:true か startAt(日本時間)を過ぎると、data-win="post" が出て data-win="pre" が消える。確認用は ?win=1。JS が無い時は発売前のまま -->
+<script>window.APATT_WIN = { ready: false, startAt: '' };(function(d){try{var w=window.APATT_WIN;if(w.ready||(w.startAt&&Date.now()>=Date.parse(w.startAt))||/[?&]win=1\b/.test(location.search))d.classList.add('win-ready')}catch(e){}})(document.documentElement);</script>
 <!-- sale band: the only place to set it. on:false hides it / text: big / note: small / from, to: 'YYYY-MM-DD' (empty = no date; after 'to' it hides itself) -->
 <script>window.APATT_SALE = { on: true, text: 'PRO 10% OFF', note: '発売記念・10日間限定', from: '2026-09-30', to: '2026-10-09', startAt: '2026-09-30T20:00:00+09:00', href: '#editions' };  /* 260930: FastSpring の自動割引 = 9/30 20:00〜10/9 23:59 JST・¥11,520(税込)。10/10 になると帯は自分で消える */</script>
 <script src="js/skins.js"></script>
@@ -63,7 +65,8 @@
     <p class="answer rv"><span class="w">APATTは、</span><span class="w">J-POPの現場で</span><span class="w">作編曲を手がけるプロが、</span><span class="w">実際の仕事で使っている処理を</span><span class="w">そのまま丸ごと</span><span class="w">1台にした道具です。</span></p>
     <p class="answer2 rv"><span class="w">挿して、AUTOを押すだけ。</span><span class="w">あなたは、次のアイデアへ。</span></p>
     <!-- 261008 AAX認識と発行設定の依頼: v1.28.2 で Pro Tools(AAX)対応。対応形式の札は字だけの自前・Apple・PACE・Avid のロゴは使わない(社長「ロゴはいいよ。aaxの。」)・「認定」と書かない・1U はキーなし -->
-    <p class="env-line rv"><span class="w">Mac専用(macOS 10.13以降)・</span><span class="w">AU / VST®3 / AAX(Pro Tools)。</span><span class="w">Windows版(VST3)は、</span><span class="w">10月中に公開予定です。</span></p>
+    <p class="env-line rv" data-win="pre"><span class="w">Mac専用(macOS 10.13以降)・</span><span class="w">AU / VST®3 / AAX(Pro Tools)。</span><span class="w">Windows版(VST3)は、</span><span class="w">10月中に公開予定です。</span></p>
+    <p class="env-line rv" data-win="post"><span class="w">Mac・Windows対応。</span><span class="w">Mac(macOS 10.13以降)はAU / VST®3 / AAX(Pro Tools)、</span><span class="w">WindowsはVST3。</span></p>
   </div>
 </section>
 
@@ -467,8 +470,10 @@
   <div class="wrap">
     <p class="eyebrow center rv">EDITIONS</p>
     <h2 id="ed-h" class="rv"><span class="w">あなたに合う</span><span class="w">APATTを。</span></h2>
+    <p class="ed-os rv" data-win="post"><span class="w">Mac・Windowsどちらでも。</span><span class="w">同じ商品・同じライセンスキーで、</span><span class="w">ご自分のコンピュータ3台まで。</span></p>
   </div>
   <div class="wrap wide">
+    <p class="eds-win-h eds-mac-h" data-win="post">Mac版</p>
     <div class="eds rv">
       <div class="ed">
         <h3>APATT 1U</h3>
@@ -497,6 +502,59 @@
         <ul><li>5段フルラック(1段目は APA-RIDE)</li><li>歌のデコボコを自動で(VOX)</li><li>DE-CLIP / DE-NOISE(Beta)</li><li>APA-MIX(全段おまかせ)</li><li>リミッター4種 / AUTO OUT</li><li>PRESET BANKS</li><li>チュートリアル13章</li></ul>
         <a class="btn btn-primary" href="https://apazzi.onfastspring.com/apatt-pro">APATT PROを購入</a>
         <p class="fine">購入フォームのお名前が、そのまま画面の「Licensed to:」に入ります(アーティスト名でもどうぞ)。</p>
+      </div>
+    </div>
+    <!-- 261016 社長「横並びの Mac の 3 つのすぐ下に、Windows 版登場として同じ並びを(説明は省いて)」。購入先は Mac と同じ商品 -->
+    <div class="eds-win rv" data-win="pre">
+      <p class="eds-win-h">Windows版、準備中(10月中)</p>
+      <div class="eds">
+        <div class="ed">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT 1U</h3>
+          <div class="price">FREE</div>
+          <div class="tax">無料・期限なし</div>
+          <button class="btn btn-ghost" type="button" disabled aria-disabled="true">準備中</button>
+        </div>
+        <div class="ed">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT ARTIST</h3>
+          <div class="price">¥5,980</div>
+          <div class="tax">税込</div>
+          <button class="btn btn-primary" type="button" disabled aria-disabled="true">準備中</button>
+        </div>
+        <div class="ed hot">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT PRO</h3>
+          <div class="price">¥12,800</div>
+          <div class="tax">税込</div>
+          <button class="btn btn-primary" type="button" disabled aria-disabled="true">準備中</button>
+        </div>
+      </div>
+    </div>
+    <div class="eds-win rv" data-win="post">
+      <p class="eds-win-h">Windows版、登場。</p>
+      <div class="eds">
+        <div class="ed">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT 1U</h3>
+          <div class="price">FREE</div>
+          <div class="tax">無料・期限なし</div>
+          <a class="btn btn-ghost" href="https://apazzi.onfastspring.com/apatt-1u">無料ダウンロード</a>
+        </div>
+        <div class="ed">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT ARTIST</h3>
+          <div class="price">¥5,980</div>
+          <div class="tax">税込</div>
+          <a class="btn btn-primary" href="https://apazzi.onfastspring.com/apatt">APATT ARTISTを購入</a>
+        </div>
+        <div class="ed hot">
+          <p class="ed-os-tag">Windows版</p>
+          <h3>APATT PRO</h3>
+          <div class="price">¥12,800</div>
+          <div class="tax">税込</div>
+          <a class="btn btn-primary" href="https://apazzi.onfastspring.com/apatt-pro">APATT PROを購入</a>
+        </div>
       </div>
     </div>
   </div>
@@ -564,9 +622,18 @@
 
     <div class="env rv">
       <p class="env-h">対応環境</p>
-      <ul class="fmt" aria-label="対応形式"><li>AU</li><li>VST3</li><li class="fmt-new">AAX</li><li>macOS</li><li>Apple Silicon・Intel</li></ul>
-      <p><strong>Mac専用</strong>(macOS 10.13以降・Apple Silicon/Intel)。<strong>AU・VST®3・AAX(Pro Tools)</strong>。インストーラー1つに全部入っていて、1ライセンスでAU・VST3・AAXのすべてが使えます。<br>Windows版(VST3)は準備中で、10月中の公開を予定しています。</p>
-      <p>有料のエディション(ARTIST・PRO)は、1ライセンス = ご本人が使う Mac 3台まで。スタジオと自宅の両方でお使いいただけます。決済は FastSpring 社が行います(日本円・税込)。</p>
+      <div class="req">
+        <div class="req-col">
+          <p class="req-os">Mac</p>
+          <ul><li>macOS 10.13以降</li><li>Apple Silicon・Intel</li><li>AU・VST®3・AAX(Pro Tools)</li></ul>
+        </div>
+        <div class="req-col" id="windows">
+          <p class="req-os">Windows<span class="req-tag" data-win="pre">準備中</span><span class="req-tag req-new" data-win="post">新発売</span></p>
+          <ul data-win="pre"><li>10月中に公開予定</li><li>VST3</li></ul>
+          <ul data-win="post"><li>Windows 10/11(64bit)</li><li>VST3</li></ul>
+        </div>
+      </div>
+      <p>有料のエディション(ARTIST・PRO)は、1ライセンス = ご本人が使う<span data-win="pre"> Mac 3台まで</span><span data-win="post">コンピュータ3台まで(Mac/Windowsどちらでも)</span>。スタジオと自宅の両方でお使いいただけます。決済は FastSpring 社が行います(日本円・税込)。</p>
     </div>
   </div>
 </section>
@@ -618,7 +685,7 @@
     <div class="faqs">
     <details class="faq"><summary>無料の 1U と有料のエディションで、音は違いますか?</summary><p>心臓部(3バンド・ダイナミクス)は、すべてのエディションで同じものです。無料の 1U は心臓部の1段だけ。有料の ARTIST・PRO は、その前後に入口・EQ・広がり・リミッターの段が加わります。ARTIST と PRO では、使える機能と同梱プリセットが異なります。まずは無料の 1U で、心臓部の音を確かめてください。</p></details>
     <details class="faq"><summary>無料で試せますか?</summary><p>はい。無料の「APATT 1U」で、心臓部の音を試せます。期限はなく、そのままずっとお使いいただけます。ラックは<strong>心臓部の1段だけの「1Uバージョン」</strong>です(5段フルラックは ARTIST・PRO)。無料の 1U は、メールアドレスの登録でお届けしています。</p></details>
-    <details class="faq"><summary>対応しているDAW・動作環境は?</summary><p>macOS 10.13以降(Apple Silicon/Intel)のAU・VST3・AAXに対応。Logic Pro、Pro Tools、Ableton Live、Cubase、Studio One、Digital Performer、FL StudioなどのDAWでお使いいただけます。1ライセンスでAU・VST3・AAXのすべてが使えます。Windows版(VST3)は準備中で、10月中の公開を予定しています。</p></details>
+    <details class="faq"><summary>対応しているDAW・動作環境は?</summary><p>macOS 10.13以降(Apple Silicon/Intel)のAU・VST3・AAXに対応。Logic Pro、Pro Tools、Ableton Live、Cubase、Studio One、Digital Performer、FL StudioなどのDAWでお使いいただけます。1ライセンスでAU・VST3・AAXのすべてが使えます。<span data-win="pre">Windows版(VST3)は準備中で、10月中の公開を予定しています。</span><span data-win="post">Windowsでは、VST3が読めるDAW(Cubase、Studio One、FL Studio、Ableton Liveなど)でお使いいただけます。Mac版と同じライセンスキーです。</span></p></details>
     <details class="faq" id="faq-protools"><summary>Pro Toolsで使えますか?</summary><p>はい。APATTはPro Tools(AAX)にも対応しています。インストーラーを入れると、AU・VST3と一緒にAAXも入ります。ARTIST・PROは今お持ちのライセンスキーのまま、無料の1Uはキーなしで、3つともPro Toolsでお使いいただけます。Pro Tools自体の動作環境は、Avidの案内をご確認ください。</p></details>
     <details class="faq"><summary>AUTO は AI ですか?</summary><p>機械学習ではなく、その場で鳴っている音を測って決める仕組みです。聴き分けるのは音の種類(歌・ピアノ・シンセ・ドラムなど)で、ジャンルを当てるものではありません。決まったあとは、耳と目で自由に戻せます。</p></details>
     <!-- 261004 SNS活動部X投稿文章用の依頼(オーナー了承): コードの出自とAI。「ゼロから」「クリーンルーム」とは書かない・法律の断定はしない。部品のライセンスは製品の THIRD_PARTY_NOTICES と合わせる(MIT だけではない: Apache 2.0 など) -->
@@ -636,16 +703,16 @@
     <details class="faq"><summary>たくさん挿しても重くなりませんか?</summary><p>全トラックに挿す前提で設計しています。音の処理は軽く、画面を閉じている間は描画処理も完全に休むので、たくさん挿しても表示の負荷が積み上がりません。</p></details>
     <details class="faq"><summary>リバーブは入っていますか?</summary><p>入っていません。リバーブは、お手持ちのものと組み合わせてお使いください。</p></details>
     <details class="faq"><summary>APATTを使って作った曲は、商用利用できますか?</summary><p>もちろんです。APATTで処理した音声の権利はすべてあなたに帰属します。商用リリース、配信、クライアントワーク、すべて追加の許諾なしにご利用いただけます。無料の 1U でも同じです。</p></details>
-    <details class="faq"><summary>ライセンスは何台まで使えますか?</summary><p>ご本人が使う Mac 3台までお使いいただけます(仕事用・自宅用・スタジオ用など)。他の方との共有・譲渡・転売はできません。</p></details>
+    <details class="faq"><summary>ライセンスは何台まで使えますか?</summary><p><span data-win="pre">ご本人が使う Mac 3台までお使いいただけます(仕事用・自宅用・スタジオ用など)。</span><span data-win="post">ご本人が使うコンピュータ3台までお使いいただけます(MacとWindowsを混ぜてもOK・仕事用・自宅用・スタジオ用など)。</span>他の方との共有・譲渡・転売はできません。</p></details>
     <details class="faq"><summary>インターネット接続やアカウント登録は必要ですか?</summary><p>不要です。メールで届くライセンスキーを一度貼り付ければ、以降はオフラインで動作します。認証サーバーを持たない設計なので、「サーバー障害で立ち上がらない」が起こりません。</p></details>
     <details class="faq"><summary>購入すると、どういう流れで使えるようになりますか?</summary><p>決済が完了すると、ダウンロードリンクとライセンスキーがメールで届きます。インストールしたら、メールのライセンスキー(APATT LICENSE から sig= の行まで)をコピーして、APATTの画面の「コピーしたライセンスキーを貼り付け」を押すだけ。画面の上に「Licensed to: お名前」が出たら完了です。以後はインターネット接続もアカウントも不要です。</p></details>
     <details class="faq"><summary>支払い方法と領収書は?</summary><p>クレジットカードなど主要な決済に対応しています。決済は世界的な決済代行のFastSpring社が安全に処理し、領収書も自動で発行されます。日本円・税込で表示・決済されます。カード情報が開発者側に渡ることはありません。</p></details>
-    <details class="faq"><summary>Macを買い替えたらどうなりますか?</summary><p>新しいMacにインストーラを入れ直し、同じライセンスキーをもう一度貼り付けるだけです(ご本人が使う Mac 3台までの範囲で入れ替えてください)。認証サーバーがないので、何年後の買い替えでもそのまま使えます。ダウンロードのリンクはご注文から7日間有効なので、インストーラとライセンスメールを一緒に保管してください。期限切れやメールの紛失は <a href="mailto:apatt@kurashin.co">apatt@kurashin.co</a> へ — 再送します。</p></details>
+    <details class="faq"><summary><span data-win="pre">Macを</span><span data-win="post">パソコンを</span>買い替えたらどうなりますか?</summary><p>新しい<span data-win="pre">Mac</span><span data-win="post">パソコン(Mac/Windows)</span>に<span data-win="pre">インストーラを</span><span data-win="post">APATTを</span>入れ直し、同じライセンスキーをもう一度貼り付けるだけです(ご本人が使う<span data-win="pre"> Mac 3台</span><span data-win="post">コンピュータ3台</span>までの範囲で入れ替えてください)。認証サーバーがないので、何年後の買い替えでもそのまま使えます。ダウンロードのリンクはご注文から7日間有効なので、インストーラとライセンスメールを一緒に保管してください。期限切れやメールの紛失は <a href="mailto:apatt@kurashin.co">apatt@kurashin.co</a> へ — 再送します。</p></details>
     <details class="faq"><summary>アップデートは有料ですか?</summary><p>同一メジャーバージョン内のアップデートは無料です。</p><!-- 260930: 新しい版の届け方(メールで案内 等)はオーナーが決めてから書く --></details>
     <details class="faq"><summary>あとからARTISTをPROにアップグレードできますか?</summary><p>アップグレードの優待を準備中です。ARTISTをお使いの方は <a href="mailto:apatt@kurashin.co">apatt@kurashin.co</a> までご連絡いただければ、個別にご案内します。</p></details>
     <details class="faq"><summary>プリセットは仲間と共有できますか?</summary><p>できます。プリセットはファイルひとつで、受け取った側はAPATTの画面に放り込むだけで読み込めます。エディションが違っても大丈夫です(そのエディションで触れる範囲で鳴ります)。</p></details>
     <!-- 261015 クーポン発行、フィードバックの依頼(F16・要望メール15人分): Windows は「準備中・10月中」に。4か所そろえた -->
-    <details class="faq" id="faq-windows"><summary>Windowsでは使えますか?</summary><p>いまはmacOS(AU・VST3・AAX)でお使いいただけます。Windows版(VST3)は準備中で、10月中の公開を予定しています。出来上がりましたら、Xとこのサイトでお知らせします。</p></details>
+    <details class="faq" id="faq-windows"><summary>Windowsでは使えますか?</summary><p data-win="pre">いまはmacOS(AU・VST3・AAX)でお使いいただけます。Windows版(VST3)は準備中で、10月中の公開を予定しています。出来上がりましたら、Xとこのサイトでお知らせします。</p><p data-win="post">はい。1U(無料)・ARTIST・PROの3つとも、Windows版(VST3)があります。Mac版と同じ商品・同じライセンスキーで、ご自分のコンピュータ3台まで(Mac/Windowsどちらでも)お使いいただけます。まずは無料のAPATT 1Uで、お使いのWindowsとDAWで動くかをお試しください。Windowsは、ダウンロードしたzipの中の「.vst3」を、VST3のフォルダ(C:\Program Files\Common Files\VST3)に入れるだけです。</p></details>
     <details class="faq"><summary>返金はできますか?</summary><p>原則として、返金は行っていません。デジタル製品は納品と同時に完全な形でお手元に残るためです。そのかわり、<strong>期限なしで試せる無料の 1U</strong>(ラックは心臓部の1段だけの<span class="w">1Uバージョン</span>で、心臓部は ARTIST・PRO と同じものです)を用意しています — ご購入前に動作と音をご確認ください。同じ製品の重複購入などは返金します。動作トラブルには返金ではなく「解決」でお応えします(開発者本人が対応します)。詳しくは<a href="refund.html">返金ポリシー</a>へ。</p></details>
     </div>
   </div>
