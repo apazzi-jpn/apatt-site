@@ -126,7 +126,7 @@ body,section,.hero,.topbar,footer,.btn,.snd,.seg,.tabs,.ed,.env,details.faq,.cmp
   transition:background-color .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease)}
 /* reduced motion: no fades, no slides. The one exception is the slow glow around the skin window (a colour change, nothing moves) —
    the owner asked for it, and his own Mac has 「視差効果を減らす」 on. */
-@media (prefers-reduced-motion:reduce){*:not(.skin-stage),*::before,*::after{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){*:not(.skin-stage):not(.eds-win-shine),*::before,*::after{transition:none!important;animation:none!important}}
 
 /* ---------- type ---------- */
 h2{font-size:clamp(28px,5vw,52px);line-height:1.28;letter-spacing:.01em;text-align:center;color:var(--text);margin:0 auto .5em;max-width:18em}
@@ -795,6 +795,12 @@ html.win-ready [data-win="pre"]{display:none!important}
 /* 261016 Windows 版の 3 つ(Mac の並びの下に同じ並び・説明は省く) */
 .eds-win{margin-top:clamp(36px,4.5vw,56px)}
 .eds-win-h{text-align:center;font-size:clamp(20px,2.4vw,26px);font-weight:800;color:var(--text);margin:0 0 18px;letter-spacing:.04em}
+/* 261019 owner「Windows版、登場。をピカピカ光らせて」: a light sweeps across the words, again and again */
+.eds-win-shine{background:linear-gradient(100deg,var(--text) 0%,var(--text) 40%,#fff8dc 48%,var(--gold) 52%,var(--text) 60%,var(--text) 100%);
+  background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:edsWinShine 2.6s ease-in-out infinite;text-shadow:none}
+@keyframes edsWinShine{0%{background-position:100% 0}60%,100%{background-position:0% 0}}
+@media (prefers-reduced-motion:reduce){.eds-win-shine{animation-duration:4.5s}}  /* 動きを減らす設定の人にも、ゆっくり光らせる(字は動かない・色だけ) */
 .eds-mac-h{margin-bottom:8px}
 .eds-win .ed{padding-top:26px;padding-bottom:28px}
 .ed-os-tag{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--gold);margin:0 0 6px}
