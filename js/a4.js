@@ -1382,8 +1382,21 @@
         sale.setAttribute('aria-label', 'セール: ' + cfg.text + (cfg.note ? '・' + cfg.note : '') + (date ? '(' + date + ')' : '') + '。エディションへ');
         sale.hidden = false; root.classList.add('has-sale');
         // the same line on the PRO card (the band links there)
-        var eds = $('#ed-sale');
-        if (eds) { eds.textContent = cfg.text + (cfg.note ? '・' + cfg.note : '') + (date ? '(' + date + ')' : ''); eds.hidden = false; }
+        // 261019: every PRO card (Mac and Windows) carries the line, and its price shows the sale price beside the old one struck through
+        var edsAll = Array.prototype.slice.call(document.querySelectorAll('.ed-sale')), eds = edsAll[0] || null;
+        function setEds(t) { edsAll.forEach(function (x) { x.textContent = t; x.hidden = false; }); }
+        function salePrice(on) {
+          Array.prototype.forEach.call(document.querySelectorAll('.price[data-sale-price]'), function (p) {
+            if (!p.getAttribute('data-base')) p.setAttribute('data-base', p.textContent);
+            var base = p.getAttribute('data-base');
+            p.textContent = '';
+            if (on) { var w = el('s', 'price-was'); w.textContent = base; p.appendChild(w); p.appendChild(document.createTextNode(p.getAttribute('data-sale-price'))); }
+            else p.textContent = base;
+          });
+        }
+        setEds(cfg.text + (cfg.note ? '・' + cfg.note : '') + (date ? '(' + date + ')' : ''));
+        var startMs0 = cfg.startAt ? Date.parse(cfg.startAt) : NaN;
+        salePrice(isNaN(startMs0) || Date.now() >= startMs0);
         // 260930 19:20 owner「20時から 10% オフ・カウントダウンをヘッダーに。20時きっかりになったら 10% オフになってる」:
         //   before cfg.startAt (a fixed moment in Japan time) the band counts down; at that second it becomes the sale line by itself
         var startMs = cfg.startAt ? Date.parse(cfg.startAt) : NaN;
@@ -1395,7 +1408,7 @@
             var left = Math.ceil((startMs - Date.now()) / 1000);
             if (left <= 0) {
               clearInterval(iv); root.classList.remove('sale-soon');
-              if (nEl) nEl.textContent = note0; if (dEl) dEl.textContent = date0; if (eds) eds.textContent = eds0;
+              if (nEl) nEl.textContent = note0; if (dEl) dEl.textContent = date0; if (eds) setEds(eds0); salePrice(true);
               sale.setAttribute('aria-label', 'セール: ' + cfg.text + (cfg.note ? '・' + cfg.note : '') + (date ? '(' + date + ')' : '') + '。エディションへ');
               sale.classList.remove('go'); void sale.offsetWidth; sale.classList.add('go');
               return;
@@ -1403,7 +1416,7 @@
             var h = Math.floor(left / 3600), m = Math.floor(left % 3600 / 60), sec = left % 60;
             var cd = (h ? h + ':' + two(m) : two(m)) + ':' + two(sec);
             if (nEl) nEl.textContent = '開始まで'; if (dEl) dEl.textContent = cd;
-            if (eds) eds.textContent = cfg.text + '・' + (cfg.note || '') + '(' + md(sd) + ' ' + hm + ' から・あと ' + cd + ')';
+            if (eds) setEds(cfg.text + '・' + (cfg.note || '') + '(' + md(sd) + ' ' + hm + ' から・あと ' + cd + ')');
             sale.setAttribute('aria-label', 'セール: ' + cfg.text + '。' + md(sd) + ' ' + hm + ' から(日本時間)。エディションへ');
           }
           root.classList.add('sale-soon');
