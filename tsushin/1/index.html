@@ -171,6 +171,26 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .game .mid{display:grid;grid-template-columns:auto 1fr auto;gap:18px;margin-top:18px;align-items:start}
 .phone{width:230px;border:10px solid var(--ink);border-radius:28px;overflow:hidden;background:#000;box-shadow:6px 6px 0 rgba(0,0,0,.3)}
 .phone video{width:100%}
+.phone[data-play]{position:relative;cursor:pointer}
+.phone video[hidden],.playcv[hidden]{display:none}
+.playcv{display:block;width:100%;aspect-ratio:2/3;touch-action:none;background:#fff;cursor:pointer}
+.shogi .playcv{aspect-ratio:1/2}
+.playask{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;visibility:hidden;background:rgba(0,0,0,.25)}
+.playask.on,.playask.off{visibility:visible}
+.playask.on{pointer-events:auto}
+.playask .pw{background:#000;color:#fff;padding:16px 14px 12px;font-size:16px;line-height:1.5;text-align:center;box-shadow:inset 0 0 0 3px #000,inset 0 0 0 6px #fff;width:84%}
+.playask.on .pw{animation:fwOpen .45s steps(1,end) both}
+.playask.on .pw>*{animation:fwText .45s steps(1,end) both}
+.playask.off .pw{animation:fwOpen .3s steps(1,end) reverse both}
+.playask.off .pw>*{opacity:0}
+@keyframes fwOpen{0%{clip-path:inset(50% 0 50% 0);box-shadow:none}15%{clip-path:inset(35% 0 35% 0);box-shadow:none}30%{clip-path:inset(15% 0 15% 0);box-shadow:none}45%{clip-path:inset(0 0 0 0);box-shadow:none}60%,100%{clip-path:inset(0 0 0 0);box-shadow:inset 0 0 0 3px #000,inset 0 0 0 6px #fff}}
+@keyframes fwText{0%,74%{opacity:0}75%,100%{opacity:1}}
+.playask .pb{display:flex;justify-content:center;gap:18px;margin-top:10px}
+.playask button{font:inherit;color:#fff;background:none;border:0;padding:4px 2px 4px 18px;cursor:pointer;position:relative}
+.playask button::before{content:"";position:absolute;left:2px;top:50%;margin-top:-6px;border:6px solid transparent;border-left:9px solid #fff;border-right:0;opacity:0}
+.playask button:hover::before,.playask button:focus-visible::before,.playask button:first-child::before{opacity:1}
+.playask .pb:hover button:not(:hover)::before{opacity:0}
+.playhint{text-align:center;margin:6px 0 0;font-size:12px}
 .vh{background:var(--yellow);border:3px solid var(--ink);color:var(--ink)}
 .shots{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px;background:var(--sky);padding:14px;border:3px solid var(--ink)}
 .shots figure{margin:0;position:relative}
@@ -562,7 +582,7 @@ body.locked{overflow:hidden}
     </div>
   </div>
   <div class="mid">
-    <div class="phone pop"><video src="a/aipos_play.mp4" poster="a/aipos_play_p.jpg" autoplay muted loop playsinline></video></div>
+    <div><div class="phone pop" data-play="aipos"><video src="a/aipos_play.mp4" poster="a/aipos_play_p.jpg" autoplay muted loop playsinline></video></div><p class="cap playhint">さわると、ちょっとだけ遊べるぞ！</p></div>
     <div class="pair" style="display:flex;gap:14px">
       <div class="tate-h vh">同じ子を見つけて<br>すくい出せ‼︎</div>
       <p class="tate" style="margin:0">これまではAPATTの☕の中でしか会えなかったアイポスが、10月31日、ついにiPhoneのアプリとしてひとり立ちする。ルールはかんたん。左上に出ている子と同じ子を見つけて、指でタップ。テンポよく続ければチェインがつながり、星にさわればフィーバータイムだ。ピクト姫と8人のなかまが、全256面でキミを待っている。</p>
@@ -831,5 +851,6 @@ marks.forEach(([q, c]) => document.querySelectorAll(q).forEach((el, i) => {
   })();
 })();
 </script>
+<script src="a/play.js"></script>
 </body>
 </html>
