@@ -243,6 +243,12 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .next h3{margin:0;font:900 36px/1.1 "Zen Kaku Gothic New";color:var(--yellow);letter-spacing:-.04em}
 .next .q{font:900 90px/1 "Zen Kaku Gothic New";color:var(--pink2);text-align:center;margin:8px 0;animation:pop 1.2s ease-in-out infinite}
 .sign{width:180px;margin:14px 0 0 auto;filter:drop-shadow(0 1px 0 rgba(0,0,0,.2))}
+.signrow{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:14px}
+.signrow .sign{margin:0}
+.xicon{position:relative;display:block;width:52px;height:52px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px var(--ink),3px 4px 0 3px var(--ink);transition:transform .15s}
+.xicon img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.xicon span{position:absolute;right:-6px;bottom:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;border:2px solid #fff}
+.xicon:hover{transform:translateY(-2px) rotate(-4deg)}
 .colophon{font-size:11px;line-height:1.6;margin-top:16px;opacity:.8}
 
 
@@ -702,7 +708,10 @@ body.locked{overflow:hidden}
       <p style="margin:0;font-weight:700">何が出るかは、まだヒミツ。おたのしみに！</p>
     </div>
   </div>
-  <img class="sign" src="a/sign.png" alt="APAZZI">
+  <div class="signrow">
+    <a class="xicon" href="https://x.com/APAZZI_SKK47" target="_blank" rel="noopener" aria-label="APAZZIのX"><img src="a/apazzi_icon.jpg" alt=""><span>𝕏</span></a>
+    <img class="sign" src="a/sign.png" alt="APAZZI">
+  </div>
   <p class="colophon">APATT通信 No.1(創刊号)2026年10月 発行・APAZZI ／ APATTの最新情報は <a href="https://apazzi-jpn.github.io/apatt-site/">APATTのサイト</a> と <a href="https://x.com/APAZZI_SKK47">X</a> で。<br>この通信は、APATTを使ってくれている人に送っています。</p>
   <span class="no r">10</span>
 </section>
