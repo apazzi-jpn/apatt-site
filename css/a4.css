@@ -171,8 +171,9 @@ h1{font-size:clamp(32px,6vw,66px);line-height:1.28;letter-spacing:.02em;color:va
   0%,100%{box-shadow:0 0 0 1px color-mix(in srgb,var(--lamp) 32%,transparent),0 0 14px 0 color-mix(in srgb,var(--lamp) 14%,transparent),0 30px 80px var(--shadow)}
   50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--lamp) 88%,transparent),0 0 52px 8px color-mix(in srgb,var(--lamp) 38%,transparent),0 30px 80px var(--shadow)}}
 .skin-stage img{width:100%;height:100%;object-fit:cover}
-.menu-hits{position:absolute;left:70.2%;width:24.9%;top:35.79%;height:55.79%;display:grid;grid-template-rows:repeat(16,1fr)}
-.menu-hits button{all:unset;display:block;cursor:pointer;border-radius:6px}
+/* 261029 本体 v1.28.58 の一覧(右下の ●): 押せる所は JS が 1 つずつ置く(行と、CYBER TOKYO・PASTEL のボタン) */
+.menu-hits{position:absolute;inset:0;pointer-events:none}
+.menu-hits button{all:unset;position:absolute;display:block;cursor:pointer;border-radius:6px;pointer-events:auto}
 .menu-hits button:focus-visible{outline:2px solid var(--blue-text);outline-offset:-1px}
 .thumbs{display:none;list-style:none;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
   margin:18px calc(var(--gutter) * -1) 0;padding:6px var(--gutter) 8px;scrollbar-width:none}
@@ -806,3 +807,25 @@ html.win-ready [data-win="pre"]{display:none!important}
 .ed-os-tag{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--gold);margin:0 0 6px}
 .eds-win .ed .btn{margin-top:auto}
 .eds-win .btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+
+/* 261028 NEWS 新着・更新+スキンのライトのデモ(実機と同じ 980×860・狭い画面は幅に合わせて縮む) */
+.nw-top{max-width:980px;margin:0 auto;text-align:center}
+.nw-date{font:600 13px/1 var(--mono);color:var(--dim);letter-spacing:.08em;margin:0 0 10px;display:flex;justify-content:center;align-items:center;gap:10px}
+.nw-new{font:800 11px/1 var(--font);letter-spacing:.14em;color:var(--bg);background:var(--gold);padding:4px 7px 3px;border-radius:4px}
+.nw-h{font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--text);margin:0 0 12px;line-height:1.4}
+.nw-p{color:var(--dim);font-size:clamp(14px,1.6vw,16px);line-height:1.9;max-width:44em;margin:0 auto 22px}
+.lt-ctrl{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 10px;margin:0 auto 16px}
+.lt-ctrl button{font:700 13px/1 var(--font);letter-spacing:.08em;color:var(--text);background:transparent;border:1px solid var(--line);border-radius:999px;padding:10px 16px;cursor:pointer}
+.lt-ctrl button[aria-pressed="true"]{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.lt-dens{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);margin-left:6px}
+.lt-dens input{width:120px;accent-color:var(--gold)}
+.lt-demo{position:relative;width:100%;max-width:980px;margin:0 auto;aspect-ratio:980/860;border-radius:10px;overflow:hidden;background:#0d1520;touch-action:none;box-shadow:0 20px 60px var(--shadow)}
+.lt-demo canvas{width:100%;height:100%;display:block}
+.lt-wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;color:var(--dim);font-size:14px}
+.lt-demo.ready .lt-wait{display:none}
+.nw-cap{font-size:12px;color:var(--dim);margin:10px 0 0}
+.nw-list{list-style:none;margin:clamp(36px,4.5vw,52px) auto 0;padding:0;max-width:640px;border-top:1px solid var(--line)}
+.nw-list li{display:flex;gap:18px;align-items:baseline;padding:14px 4px;border-bottom:1px solid var(--line);font-size:15px}
+.nw-list time{font:600 13px/1 var(--mono);color:var(--dim);letter-spacing:.06em;flex:none}
+.nw-list a{color:var(--text);text-decoration:none}
+.nw-list a:hover{color:var(--gold)}

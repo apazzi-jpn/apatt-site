@@ -32,6 +32,18 @@
   var hasIO = 'IntersectionObserver' in window;
   var chosen = typeof window.APATT_SKIN_CHOSEN === 'number' ? window.APATT_SKIN_CHOSEN : 2;
   var shown = chosen;
+  // 261029 本体 v1.28.58 の SKIN 一覧(右下の ●)と同じ並び。CYBER TOKYO は B P R G Y の 5 つのボタン、PASTEL は PINK MINT YELLOW の 3 つ。
+  //   元の CYBER TOKYO(4)は本体の一覧に無い(前に選んだ人はそのまま着ていられる = 番号は残す)
+  var LIST = [0, 1, 2, 3, 21, 19, 20, 22, 23, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 16, 17];
+  // 一覧の中の四角(エディタ 980×860 の点)= 試着の絵の上の押せる所。行は 30 点おき
+  var ROWS = { 0: 0, 1: 1, 2: 2, 3: 3, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15 };
+  var CTB = { 21: 807, 19: 832, 20: 857, 22: 882, 23: 907 }, PSB = { 18: [754, 54], 16: [808, 54], 17: [862, 67] };   // すき間なく並べる(行のあいだで試着が戻ってちらつかない)
+  function hitBox(n) {
+    if (n in ROWS) return [690, 232 + 30 * ROWS[n], 240, 30];
+    if (n in CTB) return [CTB[n], 352, 25, 30];
+    if (n in PSB) return [PSB[n][0], 712, PSB[n][1], 30];
+    return null;
+  }
 
   function $(s, c) { return (c || document).querySelector(s); }
   function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
@@ -267,11 +279,13 @@
     if (sk && typeof sk === 'object') return Object.keys(sk).map(function (k) { return parseInt(k, 10); }).filter(function (x) { return isFinite(x); });
     return [];
   }
+  var SIMILAR = { 16: 13, 17: 15, 18: 14, 19: 14, 20: 3, 21: 9, 22: 7, 23: 15 };
   function pickSkin(id, n) {
     var c = VMAN && VMAN[id]; if (!c) return null;
     var sk = skinsOf(c);
     if (!sk.length) return null;
     if (sk.indexOf(n) >= 0) return n;
+    if (SIMILAR[n] != null && sk.indexOf(SIMILAR[n]) >= 0) return SIMILAR[n];   // 261029 新しいスキンの動画がまだ無い時は、色の近いスキン
     if (sk.indexOf(2) >= 0) return 2;
     return sk[0];
   }
@@ -738,7 +752,7 @@
   /* ================= 2) SKIN: try on by hover, choose by click (no scrolling) ================= */
   var tryImg = $('#try-img'), hits = $('#menu-hits'), thumbs = $('#thumbs'), live = $('#skin-live');
   var preloaded = {};
-  function menuSrc(n) { return SKIN_DIR + 'skin_' + pad(n) + '_menu.jpg'; }
+  function menuSrc(n) { return SKIN_DIR + 'skin_' + pad(n) + (hitBox(n) ? '_menu.jpg' : '.jpg'); }   // 一覧に無い 4 は一覧を開いていない絵
   function thumbSrc(n) { return SKIN_DIR + 'skin_' + pad(n) + '_thumb.jpg'; }
   function fireSrc(n) { return SKIN_DIR + 'skin_' + pad(n) + '_apatt_fire.jpg'; }
   // リンク・フォーカス枠の青を、そのスキンの背景(bg・panel・panel2)で 4.6:1 以上になるまで暗く(明るいスキン)/明るく(暗いスキン)
@@ -762,7 +776,7 @@
     root.setAttribute('data-tone', t.light ? 'light' : 'dark');
     var m = $('meta[name="theme-color"]'); if (m) m.setAttribute('content', t.v['--bg']);
   }
-  function preload(n) { if (n < 0 || n >= SK.length || preloaded[n]) return; var i = new Image(); i.decoding = 'async'; i.src = menuSrc(n); preloaded[n] = i; }
+  function preload(n) { if (n == null || n < 0 || n >= SK.length || preloaded[n]) return; var i = new Image(); i.decoding = 'async'; i.src = menuSrc(n); preloaded[n] = i; }
   function paint(n) {
     var t = SK[n]; if (!t) return;
     shown = n; setVars(n);
@@ -862,22 +876,23 @@
     chosen = n;
     try { localStorage.setItem(KEY, String(n)); } catch (e) {}
     paint(n); markChosen(); say(SK[n].name + ' に決めました');
-    if (changed) { clipsToSkin(); qsSync(); }
+    if (changed) { clipsToSkin(); qsSync(); try { document.dispatchEvent(new CustomEvent('apatt-skin', { detail: n })); } catch (e) {} }
     if (Gate.on) Gate.open(false);                     // 260930 18:45 owner: 選んだあとの自動スクロールはやめる
   }
   if (hits && SK.length) {
-    SK.forEach(function (t, n) {
-      var b = document.createElement('button');
+    LIST.forEach(function (n) {
+      var t = SK[n], hb = hitBox(n), b = document.createElement('button');
       b.type = 'button'; b.setAttribute('data-skin-btn', n);
+      b.style.left = (hb[0] / 9.8) + '%'; b.style.top = (hb[1] / 8.6) + '%'; b.style.width = (hb[2] / 9.8) + '%'; b.style.height = (hb[3] / 8.6) + '%';
       b.setAttribute('aria-label', t.name + '(' + t.ja + ')');
       b.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') preview(n); });
       b.addEventListener('focus', function () { preview(n); });
       b.addEventListener('click', function () { choose(n); });
       hits.appendChild(b);
     });
-    // 16 枚(4.8 MB)を一度に読まず、乗った名前の前後だけ先に読む
-    $$('button', hits).forEach(function (b, n) {
-      b.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') { preload(n - 1); preload(n + 1); } });
+    // 23 枚を一度に読まず、乗った名前の前後(一覧の並びで)だけ先に読む
+    $$('button', hits).forEach(function (b, k) {
+      b.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') { preload(LIST[k - 1]); preload(LIST[k + 1]); } });
     });
     hits.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') revert(); });
     hits.addEventListener('focusout', function (e) { if (!hits.contains(e.relatedTarget)) revert(); });
@@ -887,12 +902,12 @@
     es.forEach(function (e) { if (e.isIntersecting) { var im = e.target; im.src = im.getAttribute('data-src'); im.removeAttribute('data-src'); thumbIO.unobserve(im); } });
   }, { root: thumbs, rootMargin: '0px 240px 0px 240px' }) : null;
   if (thumbs && SK.length) {
-    SK.forEach(function (t, n) {
-      var li = document.createElement('li'), b = document.createElement('button'), img = document.createElement('img');
+    LIST.forEach(function (n, k) {
+      var t = SK[n], li = document.createElement('li'), b = document.createElement('button'), img = document.createElement('img');
       b.type = 'button'; b.setAttribute('data-skin-btn', n);
       b.setAttribute('aria-label', t.name + '(' + t.ja + ')を着る');
       img.alt = ''; img.width = 360; img.height = 316; img.loading = 'lazy'; img.decoding = 'async';
-      if (n < 6 || !thumbIO) img.src = thumbSrc(n); else { img.setAttribute('data-src', thumbSrc(n)); thumbIO.observe(img); }
+      if (k < 6 || !thumbIO) img.src = thumbSrc(n); else { img.setAttribute('data-src', thumbSrc(n)); thumbIO.observe(img); }
       b.appendChild(img);
       b.addEventListener('click', function () { choose(n); });
       li.appendChild(b); thumbs.appendChild(li);
@@ -1559,14 +1574,14 @@
     onView(scene, function (v) { scene.classList.toggle('lit', v); }, { rootMargin: '-40% 0px -40% 0px' });
   });
 
-  /* ================= 8) Quick skin switch (the real heart unit × 16 skins) ================= */
+  /* ================= 8) Quick skin switch (the real heart unit × 23 skins) ================= */
   var qsStage = $('#qs-stage'), qsName = $('#qs-name'), qsImgs = [], qsIdx = chosen, qsTimer = null, qsVisible = false;
   function qsBuild() {
     if (qsImgs.length || !qsStage) return;
     SK.forEach(function (t, n) {
       var i = document.createElement('img');
       i.alt = ''; i.width = 1400; i.height = 229; i.decoding = 'async';
-      if (!reduce || n === chosen) i.src = fireSrc(n);
+      if ((!reduce && LIST.indexOf(n) >= 0) || n === chosen) i.src = fireSrc(n);
       qsStage.appendChild(i); qsImgs.push(i);
     });
     qsShow(chosen);
@@ -1577,7 +1592,7 @@
     qsImgs.forEach(function (im, k) { im.classList.toggle('on', k === n); });
     qsIdx = n; if (qsName) qsName.textContent = SK[n].name;
   }
-  function qsTick() { var nx = (qsIdx + 1) % qsImgs.length; if (qsImgs[nx].complete) qsShow(nx); }
+  function qsTick() { var k = LIST.indexOf(qsIdx), nx = LIST[(k + 1) % LIST.length]; if (qsImgs[nx].complete) qsShow(nx); }   // 一覧の並びで(4 は回さない)
   function qsRun() { clearInterval(qsTimer); if (!reduce && qsVisible && !document.hidden) qsTimer = setInterval(qsTick, 900); }
   function qsSync() { if (qsImgs.length && (reduce || !qsVisible)) qsShow(chosen); }
   if (qsStage) {
@@ -1612,4 +1627,111 @@
     else { v = document.createElement('video'); v.src = b.dataset.src; v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = 'auto'; }
     box.appendChild(v); b.replaceWith(box);
   });
+})();
+
+/* 261028 NEWS: スキンのライトのデモ(#lt-demo)。本物の APATT PRO を録画ホストで、無音のまま
+   ポインターを 40px おきの点に置いて撮った写し(img/light/sNN/ = スキンごと。261029 社長「最初に選んだスキンに合わせて」で 24 スキン)。土台 = 光 ON の全体の絵(<mode>_base)、
+   その上に、いまの位置のまわり 4 点の「まわりの写し」を近さで混ぜて重ねる(光の計算はしない = 実機と同じ見た目)。
+   濃さ = 消した絵(off)と光の絵の混ぜ。さわらない間は光がゆっくり歩く。見えてくるまで何も読まない */
+(function () {
+  var demo = document.getElementById('lt-demo'); if (!demo) return;
+  var cv = demo.querySelector('canvas'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
+  var dens = document.getElementById('lt-dens'), btns = document.querySelectorAll('.lt-ctrl button');
+  var DIR = '', M = {}, off = null, mode = 'spot', skin = -1;
+  var capSkin = document.getElementById('lt-skin');
+  function nowSkin() { return window.APATT_A4 ? window.APATT_A4.skin() : typeof window.APATT_SKIN_CHOSEN === 'number' ? window.APATT_SKIN_CHOSEN : 2; }
+  // スキンを替えた = そのスキンの写しを読み直す(読みかけの前のスキンの絵は捨てる)
+  function setSkin(n) {
+    if (n === skin) return;
+    skin = n; DIR = 'img/light/s' + (n < 10 ? '0' : '') + n + '/'; M = {}; last = ''; demo.classList.remove('ready');
+    var t = (window.APATT_SKINS || [])[n], nm = t ? t.name : '';
+    if (capSkin) capSkin.textContent = nm;
+    cv.setAttribute('aria-label', 'APATT PRO(スキン ' + nm + ')の画面。ポインターを動かすと光がついてくる');
+    off = img('off.webp', function () { last = ''; });
+    if (mode !== 'off') load(mode);
+    setTimeout(function () { if (skin === n) ['spot', 'edge', 'ambient'].forEach(load); }, 2500);
+  }
+  var lit = document.createElement('canvas'); lit.width = W; lit.height = H; var lctx = lit.getContext('2d');
+  var t0 = document.createElement('canvas'), t1 = document.createElement('canvas');
+  function img(src, cb) { var im = new Image(); im.decoding = 'async'; im.onload = cb || null; im.src = DIR + src; return im; }
+  function load(m) {
+    if (M[m]) return M[m];
+    var o = M[m] = { ok: false, meta: null, base: null, sheets: [], baseDrawn: false };
+    fetch(DIR + m + '.json').then(function (r) { return r.json(); }).then(function (meta) {
+      o.meta = meta; var left = meta.sheets.length + 1;
+      var done = function () { if (--left === 0) { o.ok = true; o.baseDrawn = false; last = ''; } };
+      o.base = img(m + '_base.webp', done);
+      meta.sheets.forEach(function (s, i) { o.sheets[i] = img(s, done); });
+    }).catch(function () {});
+    return o;
+  }
+  var x = W / 2, y = H * 0.45, cx = x, cy = y, last = '', prev = null;
+  function tile(o, k) {
+    var me = o.meta, sh = Math.floor(k / me.nPerSheet), i = k % me.nPerSheet;
+    return [o.sheets[sh], (i % me.per) * me.tw, Math.floor(i / me.per) * me.th, me.boxes[k][0], me.boxes[k][1], me.tw, me.th];
+  }
+  // 格子の点の並び(間隔がそろっていなくてもよい)の中で、v がどの 2 点の間の、どのあたりか
+  function seg(a, v) {
+    if (v <= a[0]) return [0, 0];
+    for (var i = 0; i < a.length - 1; i++) if (v < a[i + 1]) return [i, (v - a[i]) / (a[i + 1] - a[i])];
+    return [a.length - 2, 1];
+  }
+  function drawLit(o) {
+    var me = o.meta;
+    if (!o.baseDrawn) { lctx.globalAlpha = 1; lctx.drawImage(o.base, 0, 0); o.baseDrawn = true; prev = null; }
+    var sx = seg(me.xs, cx), sy = seg(me.ys, cy), c0 = sx[0], fx = sx[1], r0 = sy[0], fy = sy[1];
+    var ks = [r0 * me.cols + c0, r0 * me.cols + c0 + 1, (r0 + 1) * me.cols + c0, (r0 + 1) * me.cols + c0 + 1];
+    var ux0 = W, uy0 = H, ux1 = 0, uy1 = 0;
+    ks.forEach(function (k) { var b = me.boxes[k]; ux0 = Math.min(ux0, b[0]); uy0 = Math.min(uy0, b[1]); ux1 = Math.max(ux1, b[0] + me.tw); uy1 = Math.max(uy1, b[1] + me.th); });
+    var uw = ux1 - ux0, uh = uy1 - uy0;
+    if (prev) { lctx.globalAlpha = 1; lctx.drawImage(o.base, prev[0], prev[1], prev[2], prev[3], prev[0], prev[1], prev[2], prev[3]); }
+    [t0, t1].forEach(function (t, row) {
+      if (t.width !== uw || t.height !== uh) { t.width = uw; t.height = uh; }
+      var c = t.getContext('2d'); c.globalAlpha = 1; c.drawImage(o.base, ux0, uy0, uw, uh, 0, 0, uw, uh);
+      [0, 1].forEach(function (col) {
+        var p = tile(o, ks[row * 2 + col]); c.globalAlpha = col ? fx : 1;
+        c.drawImage(p[0], p[1], p[2], p[5], p[6], p[3] - ux0, p[4] - uy0, p[5], p[6]);
+      });
+    });
+    lctx.globalAlpha = 1; lctx.drawImage(t0, ux0, uy0); lctx.globalAlpha = fy; lctx.drawImage(t1, ux0, uy0);
+    prev = [ux0, uy0, uw, uh];
+  }
+  function draw() {
+    var key = [mode, cx.toFixed(1), cy.toFixed(1), dens.value].join();
+    if (key === last || !off || !off.complete || !off.naturalWidth) return;
+    ctx.globalAlpha = 1; ctx.drawImage(off, 0, 0);
+    if (mode !== 'off') {
+      var o = load(mode); if (!o.ok) return;
+      drawLit(o); ctx.globalAlpha = dens.value / 100; ctx.drawImage(lit, 0, 0);
+    }
+    demo.classList.add('ready'); last = key;
+  }
+  function setMode(m) {
+    if (M[mode]) M[mode].baseDrawn = false;
+    mode = m; btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.m === m)); });
+    if (m !== 'off') { load(m); M[m].baseDrawn = false; }
+    last = '';
+  }
+  function move(e) { var r = demo.getBoundingClientRect(); x = (e.clientX - r.left) / r.width * W; y = (e.clientY - r.top) / r.height * H; touched = true; }
+  demo.addEventListener('pointermove', move); demo.addEventListener('pointerdown', move);
+  btns.forEach(function (b) { b.addEventListener('click', function () { setMode(b.dataset.m); }); });
+  dens.addEventListener('input', function () { last = ''; });
+  var started = false, touched = false, t = 0, visible = false;
+  function start() {
+    if (started) return; started = true;
+    setSkin(nowSkin());
+    (function tick() {
+      if (visible) {
+        if (!touched) { t += .01; x = W * (.5 + .36 * Math.sin(t)); y = H * (.45 + .33 * Math.sin(t * 1.7)); }
+        cx += (x - cx) * .25; cy += (y - cy) * .25; draw();
+      }
+      requestAnimationFrame(tick);
+    })();
+  }
+  function capOnly(n) { var t = (window.APATT_SKINS || [])[n]; if (capSkin && t) capSkin.textContent = t.name; }
+  capOnly(nowSkin());
+  document.addEventListener('apatt-skin', function (e) { if (started) setSkin(e.detail); else capOnly(e.detail); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.isIntersecting; if (visible) start(); }); }, { rootMargin: '400px' }).observe(demo);
+  } else { visible = true; start(); }
 })();
