@@ -1735,3 +1735,19 @@
     new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.isIntersecting; if (visible) start(); }); }, { rootMargin: '400px' }).observe(demo);
   } else { visible = true; start(); }
 })();
+
+/* 261030 COFFEE BREAK(#coffee): AiPoS としょうぎの動画は、見える所に来た時だけ読んで回す(離れたら止める)。
+   AiPoS の「ちょっとだけ遊ぶ」は coffee/play.js(APATT通信 No.1 の写し)。遊んでいる間は動画が隠れている = 触らない */
+(function () {
+  // ☕の場所の絵 = 選んだスキンの画面全体(all_NN)と右下の拡大(cup_NN)(coffee/cup/・元の CYBER TOKYO 4 は 21 の絵)
+  var cup = document.getElementById('cb-cup');
+  var cupAll = document.getElementById('cb-all');
+  function cupTo(n) { if (!cup) return; if (n === 4) n = 21; var k = (n < 10 ? '0' : '') + n; cup.src = 'coffee/cup/cup_' + k + '.jpg'; if (cupAll) cupAll.src = 'coffee/cup/all_' + k + '.jpg'; }
+  cupTo(window.APATT_A4 ? window.APATT_A4.skin() : (window.APATT_SKIN_CHOSEN || 2));
+  document.addEventListener('apatt-skin', function (e) { cupTo(e.detail); });
+  var vs = document.querySelectorAll('#coffee video'); if (!vs.length) return;
+  function go(v, on) { if (v.hidden) return; if (on) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }
+  if (!('IntersectionObserver' in window)) { vs.forEach(function (v) { v.preload = 'auto'; go(v, true); }); return; }
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { go(e.target, e.isIntersecting); }); }, { rootMargin: '200px 0px' });
+  vs.forEach(function (v) { io.observe(v); });
+})();
