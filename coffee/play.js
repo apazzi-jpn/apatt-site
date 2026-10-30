@@ -2,7 +2,7 @@
    アイポス: いまの アイポスの チュートリアルと 同じ 見た目の 一本道(下の Aipos)
    1ドット = 2px。字は AiPoS-10x10 */
 (()=>{
-const D='coffee/play/';   // 261030 公式サイトの写し(元 = APATT通信 tsushin/1/a/play.js)
+const D='coffee/play/';   // 261030 公式サイトの写し(元 = APATT通信 tsushin/1/a/play.js・261031 b18575e から写し直し)
 const IMG={};
 function img(n){if(IMG[n])return IMG[n];const i=new Image();i.src=D+n;IMG[n]=i;return i;}
 const KINDS=['akii','melody','oji','neko','pano','honya','succer','tabizuki'];
@@ -86,7 +86,7 @@ function Aipos(cv,onClose){
  function reset(){S={ph:'tap',t:0,T:0,kids:START.map(o=>({...o,hx:o.x,hy:o.y,ph:Math.random()})),queue:[],poses:[],fx:[],conf:[],king:null,saved:0,
    bub:null,spot:0,spotOn:false,press:null,held:null,charge:0,chargeAcc:0,suck:[],sucked:0,slide:0,end:null,pend:null,flyIn:[]};
   S.queue=S.kids.slice();   // 列 = 盤面の 子(この 順に すくう)
-  bubble(['とけいの　よこと　おなじ','こを　おしてみて！'],'B',3,0);}   // 261031 社長「時計の横の子を押してって言ったら時計の横の子を押す」= 同じ子を押す
+  bubble(['この　こを　タップ！'],'B',3,0);}
  function bubble(lines,spot,n,done){S.bub={lines,spot,n,done,t:0};}
  function later(sec,f){S.pend={at:S.T+sec,f};}
  function puff(x,y){S.fx.push({x,y,t:0});}
@@ -205,15 +205,13 @@ function Aipos(cv,onClose){
  function draw(){const kb=scene();
   // スポットライト: いま 押す 物(白い 枠と ▽)だけ 残して パレットで 暗く
   const lv=Math.floor(S.spot);
-  if(lv>0){const keep=[];
-   if(S.ph==='tap'||S.ph==='pos'){for(const k of targets()){keep.push({x:k.x-20,y:k.y-38,w:40,h:58});}if(S.ph==='tap')keep.push({x:86,y:0,w:108,h:66});}
-   if(S.ph==='king'&&kb)keep.push({x:kb.x,y:kb.y-22,w:kb.w,h:kb.h+22});
+  if(lv>0){const keep=[],br=(()=>{const k=Math.floor((S.T%1)/.125)&7;return 2*(k<4?k:7-k);})();   // 1秒で 4段 大きく → 4段 小さく(0,2,4,6,6,4,2,0)
+   if(S.ph==='tap'||S.ph==='pos')for(const k of targets())keep.push({cx:r2(k.x),cy:r2(k.y),r:24+br});
+   if(S.ph==='king'&&kb)keep.push({cx:r2(kb.x+kb.w/2),cy:r2(kb.y+kb.h/2),r:(Math.max(kb.w,kb.h)/2+br)&~1});
    octx.drawImage(cv,0,0);const id=ctx.getImageData(0,0,W,H),d=id.data;
    for(let i=0;i<d.length;i+=4){const v=nesDim(d[i]<<16|d[i+1]<<8|d[i+2],lv);d[i]=v>>16&255;d[i+1]=v>>8&255;d[i+2]=v&255;}
    ctx.putImageData(id,0,0);
-   for(const r of keep){const x=Math.max(0,r.x),y=Math.max(0,r.y),w=Math.min(W-x,r.w),h=Math.min(H-y,r.h);ctx.drawImage(orig,x,y,w,h,x,y,w,h);}
-   if(S.ph==='king'&&kb){ctx.fillStyle='#f7b500';ctx.fillRect(kb.x,kb.y,kb.w,2);ctx.fillRect(kb.x,kb.y+kb.h-2,kb.w,2);ctx.fillRect(kb.x,kb.y,2,kb.h);ctx.fillRect(kb.x+kb.w-2,kb.y,2,kb.h);}
-   if(lv>=2){for(const k of targets())downArrow(k.x,k.y-36);if(S.ph==='king'&&kb)downArrow(kb.x+kb.w/2,kb.y-20);}}
+   for(const c of keep)for(let dy=-c.r;dy<c.r;dy+=2){const yy=dy+1,hw=2*Math.floor(Math.sqrt(Math.max(0,c.r*c.r-yy*yy))*.5+.5);if(hw<=0)continue;const x=Math.max(0,c.cx-hw),y=c.cy+dy,w=Math.min(W,c.cx+hw)-x;if(y<0||y>=H||w<=0)continue;ctx.drawImage(orig,x,y,w,2,x,y,w,2);}}
   // 指(いま 押す 物)
   if(!S.pend&&!S.held&&!S.press&&lv>=2){if(S.ph==='tap'&&S.queue[0])hand(S.queue[0].x+2,S.queue[0].y+2);
    if(S.ph==='pos'){const m=targets()[0];if(m)hand(m.x+2,m.y+2);}
