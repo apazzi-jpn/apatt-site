@@ -86,7 +86,7 @@ function Aipos(cv,onClose){
  function reset(){S={ph:'tap',t:0,T:0,kids:START.map(o=>({...o,hx:o.x,hy:o.y,ph:Math.random()})),queue:[],poses:[],fx:[],conf:[],king:null,saved:0,
    bub:null,spot:0,spotOn:false,press:null,held:null,charge:0,chargeAcc:0,suck:[],sucked:0,slide:0,end:null,pend:null,flyIn:[]};
   S.queue=S.kids.slice();   // 列 = 盤面の 子(この 順に すくう)
-  bubble(['とけいの　よこの　こを','おしてみて！'],'B',3,0);}
+  bubble(['とけいの　よこと　おなじ','こを　おしてみて！'],'B',3,0);}   // 261031 社長「時計の横の子を押してって言ったら時計の横の子を押す」= 同じ子を押す
  function bubble(lines,spot,n,done){S.bub={lines,spot,n,done,t:0};}
  function later(sec,f){S.pend={at:S.T+sec,f};}
  function puff(x,y){S.fx.push({x,y,t:0});}
