@@ -439,13 +439,13 @@ body.locked{overflow:hidden}
     <div class="blurbs">
       <div class="blurb">大特集‼︎ <em>スキンに明かりがついた！</em></div>
       <div class="blurb b2">おまたせ‼︎ <em>Windows</em>にも上陸</div>
-      <div class="blurb b3">新作ゲーム <em>AiPoS</em> 10月31日 App Storeに登場</div>
+      <div class="blurb b3">新作ゲーム <em>AiPoS</em> まもなく App Storeに登場</div>
       <div class="blurb b4">☕で<em>しょうぎ</em>！？ 大会をのぞいてみた</div>
     </div>
     <span class="star" style="right:24px;bottom:20px">★</span>
     <span class="star" style="left:46%;top:6px;font-size:28px;animation-duration:4s">★</span>
   </div>
-  <div class="ticker"><span>★ APATT通信 創刊号 ★ スキンに明かりがついた‼︎ ★ Windowsにも上陸 ★ AiPoS 10月31日ひとり立ち ★ ☕でしょうぎ大会 ★ 作者に突撃インタビュー ★</span></div>
+  <div class="ticker"><span>★ APATT通信 創刊号 ★ スキンに明かりがついた‼︎ ★ Windowsにも上陸 ★ AiPoS まもなくひとり立ち ★ ☕でしょうぎ大会 ★ 作者に突撃インタビュー ★</span></div>
   <div class="parade" aria-hidden="true">
     <div class="sp hop"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div>
     <div class="sp hop" style="animation-delay:.1s"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div>
@@ -575,7 +575,7 @@ body.locked{overflow:hidden}
       <div class="yomi"><span class="band">アイポス</span></div>
     </div>
     <div class="debut pop">
-      <div class="d1">10月31日</div>
+      <div class="d1">まもなく</div>
       <div class="d2">ついに<br>ひとり立ち‼︎</div>
       <div class="d3">App StoreからiPhoneの<br>ゲームアプリとして単独デビュー</div>
       <div class="d4">10面まで無料</div>
@@ -585,7 +585,7 @@ body.locked{overflow:hidden}
     <div><div class="phone pop" data-play="aipos"><video src="a/aipos_play.mp4" poster="a/aipos_play_p.jpg" autoplay muted loop playsinline></video></div><p class="cap playhint">さわると、ちょっとだけ遊べるぞ！</p></div>
     <div class="pair" style="display:flex;gap:14px">
       <div class="tate-h vh">同じ子を見つけて<br>すくい出せ‼︎</div>
-      <p class="tate" style="margin:0">これまではAPATTの☕の中でしか会えなかったアイポスが、10月31日、ついにiPhoneのアプリとしてひとり立ちする。ルールはかんたん。左上に出ている子と同じ子を見つけて、指でタップ。テンポよく続ければチェインがつながり、星にさわればフィーバータイムだ。ピクト姫と8人のなかまが、全256面でキミを待っている。</p>
+      <p class="tate" style="margin:0">これまではAPATTの☕の中でしか会えなかったアイポスが、ついにiPhoneのアプリとしてひとり立ちする。ルールはかんたん。左上に出ている子と同じ子を見つけて、指でタップ。テンポよく続ければチェインがつながり、星にさわればフィーバータイムだ。ピクト姫と8人のなかまが、全256面でキミを待っている。</p>
     </div>
     <div style="position:relative;width:150px;height:160px"><div class="burst" style="position:relative;width:150px;height:150px">フィーバー<br>タイム<br>だ‼︎</div></div>
   </div>
@@ -744,12 +744,12 @@ body.locked{overflow:hidden}
 
 </main>
 <script>
-// AiPoS の App Store の番号(ASC の「App 情報」の Apple ID)。空のうちはボタンを「10月31日 公開」にしておく
+// AiPoS の App Store の番号(ASC の「App 情報」の Apple ID)。空のうちはボタンを「まもなく登場」にしておく(261101 10/31 に出せなかった)
 const AIPOS_APP_ID = '';
 (() => {
   const a = document.getElementById('storeBtn'), n = document.getElementById('storeNote');
   if (AIPOS_APP_ID) { a.href = 'https://apps.apple.com/jp/app/id' + AIPOS_APP_ID; a.target = '_blank'; a.rel = 'noopener'; }
-  else { a.textContent = 'App Storeに10月31日 登場！'; a.classList.add('wait'); a.removeAttribute('href'); n.textContent = 'ボタンは発売の日に押せるようになるぞ'; }
+  else { a.textContent = 'まもなくApp Storeに登場！'; a.classList.add('wait'); a.removeAttribute('href'); n.textContent = 'ボタンは発売の日に押せるようになるぞ'; }
 })();
 // 縦書きの数字を立てる(ローマ字は横のまま・！？は全角のまま縦に並ぶ)
 document.querySelectorAll('.tate,.tate-h').forEach(el => {
