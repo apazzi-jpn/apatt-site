@@ -124,7 +124,7 @@ function Aipos(cv,onClose){
    S.queue=[];KINGKIDS.forEach((o,i)=>{const k={...o,hx:o.x,hy:o.y,ph:Math.random(),born:S.T+.3+i*.06};S.kids.push(k);S.queue.push(k);});later(2,()=>go('king'));}
   if(ph==='king')bubble(['キングを','ながおしで　ためて'],'K',3,0);
   if(ph==='clear'){bubble(null);confetti();later(2.2,()=>go('end'));}
-  if(ph==='end'){S.bub=null;S.end=EndWin(W,H,['あそんで　くれて','ありがとう！'],'つづきは　アイフォーンで');}}
+  if(ph==='end'){S.bub=null;S.end=EndWin(W,H,['あそんで　くれて','ありがとう！'],'つづきは　APATTで');}}
  function startSuck(){S.ph='suck';S.t=0;S.suck=S.queue.map((k,i)=>({k,t:-i*.12}));S.queue=[];bubble(['いっきに','すいこみます！'],'K',3,3);}
  // ---- 進める ----
  function step(dt){S.T+=dt;S.t+=dt;if(S.bub)S.bub.t+=dt;S.slide=Math.max(0,S.slide-dt/.12);
