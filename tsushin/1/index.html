@@ -41,7 +41,7 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .tcy{display:inline-flex;justify-content:center;align-items:center;width:1em;height:1.2em;writing-mode:horizontal-tb;vertical-align:middle;position:relative;left:-.2em;white-space:nowrap;line-height:1;letter-spacing:0}
 .tcy.n2{font-size:.92em;height:1.2em;left:-.22em}
 .tcy.n3{font-size:.8em;height:1.3em;letter-spacing:-.02em;left:-.25em}
-.tcy.cup{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:.95em;height:1.2em;left:-.12em}
+.tcy.cup{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:.95em;height:1.2em;left:-.24em}   /* 261111 社長「ずれてる」: 取っ手の分だけ右へ。カップとお皿のまん中を列のまん中に */
 .vlat{position:relative;left:.1em}
 .vbang{position:relative;left:.07em}
 /* ブラウン管の写真 */
@@ -146,6 +146,7 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .win{background:var(--lime)}
 .win .stripe{position:absolute;left:-10%;right:-10%;top:150px;height:58px;transform:rotate(-4deg);opacity:.9}
 .win .title{position:relative;font:900 clamp(48px,11vw,104px)/1.02 "Zen Kaku Gothic New";color:#1d7fd6;text-shadow:4px 4px 0 #fff,7px 7px 0 var(--ink);letter-spacing:-.06em}
+.win .monitor .crt::after{display:none} /* Windows の写真はブラウン管ふうにしない(社長 261110)*/
 .win .grid{position:relative;display:grid;grid-template-columns:1.4fr 1fr;gap:22px;margin-top:40px}
 .monitor{background:#d9d4c7;border:4px solid var(--ink);border-radius:14px;padding:14px 14px 30px;box-shadow:6px 6px 0 var(--ink)}
 .monitor .crt{aspect-ratio:1100/1000}
@@ -168,7 +169,8 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 
 /* ===== 新作ゲーム AiPoS ===== */
 .game{background:var(--pink);}
-.game .ribbon{position:absolute;top:0;left:0;right:0;height:40px;background:var(--ink);color:var(--yellow);font:900 18px/40px "Zen Kaku Gothic New";letter-spacing:.3em;text-align:center}
+.game .ribbon{position:absolute;top:0;left:0;right:0;height:40px;background:var(--ink);color:var(--yellow);font:900 18px/40px "Zen Kaku Gothic New";letter-spacing:.3em;text-align:center;white-space:nowrap;overflow:hidden}
+@media (max-width:700px){.game .ribbon{font-size:13px;letter-spacing:.04em}}
 .game .hero{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;margin-top:34px}
 .biglogo{width:100%;max-width:520px;image-rendering:pixelated;filter:drop-shadow(6px 6px 0 var(--ink))}
 .game .yomi{margin-top:8px}
@@ -197,12 +199,27 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .playask button:hover::before,.playask button:focus-visible::before,.playask button:first-child::before{opacity:1}
 .playask .pb:hover button:not(:hover)::before{opacity:0}
 .playhint{text-align:center;margin:6px 0 0;font-size:12px}
+/* ブラウザ版 AiPoS の窓(261110)*/
+html.awopen,html.awopen body{overflow:hidden}
+.aiposweb{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center}
+.aiposweb .awbox{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.aiposweb .awclose{font:inherit;font-size:16px;color:#fff;background:#000;border:0;padding:8px 14px;box-shadow:inset 0 0 0 3px #000,inset 0 0 0 6px #fff;cursor:pointer}
+.aiposweb .awscr{position:relative;background:#000;box-shadow:0 0 0 6px var(--ink)}
+.aiposweb iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent}
+.aiposweb .awload{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
 .vh{background:var(--yellow);border:3px solid var(--ink);color:var(--ink)}
 .shots{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px;background:var(--sky);padding:14px;border:3px solid var(--ink)}
 .shots figure{margin:0;position:relative}
 .shots .crt{aspect-ratio:300/447;border-radius:10px;box-shadow:0 0 0 2px var(--red)}
 .shots .num{position:absolute;top:-12px;left:-10px;width:32px;height:32px;font-size:18px;z-index:2}
 .shots figcaption{margin-top:6px}
+/* 写真の箱はブラウン管の筋を薄く・明るく(社長 261110「ちょっと暗く感じる」)*/
+.shots .crt::after{background:repeating-linear-gradient(90deg,rgba(255,0,0,.04) 0 1px,rgba(0,255,0,.035) 1px 2px,rgba(0,0,255,.04) 2px 3px),
+             repeating-linear-gradient(0deg,rgba(0,0,0,.09) 0 1px,transparent 1px 3px),
+             radial-gradient(ellipse at 50% 45%,transparent 66%,rgba(0,0,0,.22))}
+.shots .crt img{filter:brightness(1.07) saturate(1.06)}
+.shots .crt video{animation-name:flickb}
+@keyframes flickb{0%,96%,100%{filter:brightness(1.07) saturate(1.06)}97%{filter:brightness(1.3) contrast(1.1)}98%{filter:brightness(.97)}}
 /* GREAT のぞき穴 */
 .peek{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;margin-top:20px;background:var(--ink);color:#fff;padding:18px 20px;border:4px solid var(--ink);box-shadow:6px 6px 0 rgba(0,0,0,.3)}
 .peek .hole{position:relative;width:190px;height:190px}
@@ -216,11 +233,12 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .store .go.wait{background:#777;pointer-events:none}
 .store .cap::before{content:none}
 .chars{margin-top:20px;display:grid;grid-template-columns:42px 1fr;border:4px solid var(--ink);background:#fff}
-.chars .tab{background:var(--red);color:#fff;writing-mode:vertical-rl;font:900 18px "Zen Kaku Gothic New";display:grid;place-items:center;letter-spacing:.1em}
-.chars .list{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;padding:10px 8px}
+.chars .tab{background:var(--red);color:#fff;writing-mode:vertical-rl;font:900 14px/1 "Zen Kaku Gothic New";display:grid;place-items:center;letter-spacing:.02em;padding:8px 0}
+.chars .list{display:grid;grid-template-columns:repeat(8,1fr);gap:10px 4px;padding:12px 6px 10px;align-items:end}
 .chars figure{margin:0;text-align:center}
-.chars .sp{width:48px;height:48px;margin:0 auto;background:#fff}
-.chars figcaption{font:900 11.5px/1.3 "Zen Kaku Gothic New";margin-top:4px}
+.chars .sp{width:64px;height:64px;margin:0 auto;background:#fff}
+.chars figcaption{font:900 11.5px/1.3 "Zen Kaku Gothic New";margin-top:4px;white-space:nowrap;letter-spacing:-.04em}
+@media (max-width:900px){.chars .list{grid-template-columns:repeat(4,1fr)}}
 
 /* ===== しょうぎ ===== */
 .shogi{background:#ffe2a8}
@@ -239,6 +257,9 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .menu ul{list-style:none;margin:0;padding:0}
 .menu li{display:flex;flex-direction:column;border-bottom:2px dotted #c9a57a;padding:8px 0}
 .menu li b{font:900 22px "Zen Kaku Gothic New"}
+.menu li a{display:flex;flex-direction:column;color:inherit;text-decoration:none}
+.menu li i{font:900 12px "Zen Kaku Gothic New";font-style:normal;color:var(--red);margin-top:2px}
+.cbtag{display:inline-block;background:#8a5a2b;color:#fff;font:900 15px/1 "Zen Kaku Gothic New";padding:7px 12px 8px;margin:0 0 12px;letter-spacing:.04em}
 .menu li span{font-size:13px;font-weight:700}
 /* ☕はココ(画面説明) */
 .where{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center;margin-top:22px;background:#fff;border:3px solid var(--ink);padding:14px;box-shadow:5px 5px 0 var(--ink)}
@@ -271,6 +292,19 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .next h3{margin:0;font:900 36px/1.1 "Zen Kaku Gothic New";color:var(--yellow);letter-spacing:-.04em}
 .next .q{font:900 90px/1 "Zen Kaku Gothic New";color:var(--pink2);text-align:center;margin:8px 0;animation:pop 1.2s ease-in-out infinite}
 .sign{width:180px;margin:14px 0 0 auto;filter:drop-shadow(0 1px 0 rgba(0,0,0,.2))}
+.licname{margin-top:20px;background:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:8px 20px;align-items:center}
+.licname h3{grid-column:1/-1;margin:0;font:900 22px "Zen Kaku Gothic New";color:var(--ink);letter-spacing:-.02em}
+.licname h3::before{content:"★ ";color:var(--red)}
+.licname p{margin:0;font-weight:700;font-size:14px;line-height:1.7}
+.licshot{position:relative;grid-row:2/4;border:3px solid var(--ink);background:#111;overflow:hidden}
+.licshot img{display:block;width:100%}
+.licshot .ring{position:absolute;left:55%;top:50%;width:80%;height:80%;border:3px solid var(--red);border-radius:50%;transform:translate(-50%,-50%) rotate(-4deg)}
+.licname .go{justify-self:start}
+.licname .cap{grid-column:2}
+@media (max-width:700px){.licname .cap{grid-column:auto}}
+button.go{cursor:pointer;-webkit-appearance:none;appearance:none;line-height:normal}
+button.go.done{background:var(--green)}
+@media (max-width:700px){.licname{grid-template-columns:1fr}.licshot{grid-row:auto}}
 .signrow{display:flex;justify-content:flex-end;align-items:center;gap:14px;margin-top:14px}
 .signrow .sign{margin:0}
 .xicon{position:relative;display:block;width:52px;height:52px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px var(--ink),3px 4px 0 3px var(--ink);transition:transform .15s}
@@ -316,6 +350,24 @@ h1,h2,h3,.band,.blurb,.tate-h,.cloud,.burst,.toc li a b,.issue b,.spec,.when,.ti
 .flyL.in,.flyR.in{opacity:1;transform:rotate(var(--r,0deg));transition:transform .7s cubic-bezier(.2,1.4,.4,1),opacity .3s}
 .shots figure.in .crt{animation:wob 2.4s ease-in-out infinite}
 .shots figure:nth-child(odd).in .crt{animation-delay:-1.2s}
+/* キングポスをつくれ‼︎の下の切り抜き(ファミマガのウインナーとエッグの作り・社長 261110)*/
+.cutz{position:absolute;left:-83px;top:0;width:250px;height:350px;pointer-events:none}
+.cutz .cap{position:absolute;left:0;width:78px;margin:0;font-size:11px;line-height:1.5}
+.cutz .c1{top:6px}.cutz .c2{top:112px}
+.cutz .oct{position:absolute;left:68px;top:150px;width:182px;height:194px;background:var(--pink2);
+  clip-path:polygon(24% 0,100% 0,100% 78%,84% 100%,0 100%,0 26%)}
+.cutz .oct img,.cutz .oct video{position:absolute;inset:3px;width:calc(100% - 6px);height:calc(100% - 6px);object-fit:cover;
+  clip-path:polygon(24% 0,100% 0,100% 78%,84% 100%,0 100%,0 26%)}
+.cutz .lensk{position:absolute;left:0;top:226px;width:96px;height:96px;border-radius:50%;overflow:hidden;
+  border:3px solid var(--pink2);background:#000;z-index:2}
+.cutz .lensk img{width:100%;height:100%;display:block}
+.cutz .tag{position:absolute;background:var(--red);color:#fff;font:900 13px/1 "Zen Kaku Gothic New";padding:5px 9px 6px;z-index:3;letter-spacing:-.02em}
+.cutz .t1{left:150px;top:138px}.cutz .t2{left:20px;top:318px}
+.cutz .oct,.cutz .lensk{opacity:0}
+.cutz .oct.in,.cutz .lensk.in{animation:cutin .5s cubic-bezier(.3,1.6,.5,1) both}
+.cutz .lensk.in{animation-delay:.25s}
+@media (min-width:701px) and (max-width:900px){.cutz{left:auto;right:0;top:46px;transform:scale(.66);transform-origin:100% 0}.cutz .cap{display:none}}
+@keyframes cutin{0%{transform:scale(.3) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
 @keyframes wob{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
 .num{animation:numpop 1.8s ease-in-out infinite}
 @keyframes numpop{0%,85%,100%{transform:scale(1)}92%{transform:scale(1.25)}}
@@ -372,6 +424,9 @@ body.locked{overflow:hidden}
 
 /* ===== スマホ ===== */
 @media (max-width:700px){
+  .game .bwrap{width:250px!important;height:350px!important;margin:0 auto}
+  .game .bwrap .burst{margin-left:83px}
+  .cutz{left:0}
   .page{padding:22px 16px 46px}
   .cover .body,.light .grid,.win .grid,.letters .grid,.shogi .grid,.game .hero{grid-template-columns:1fr}
   .game .mid{grid-template-columns:1fr}
@@ -385,6 +440,8 @@ body.locked{overflow:hidden}
   .debut{transform:none}
   .roster .list{grid-template-columns:repeat(4,1fr)}
   .chars .list{grid-template-columns:repeat(4,1fr)}
+  .chars{grid-template-columns:1fr}.chars .tab{writing-mode:horizontal-tb;padding:6px 0;font-size:14px}
+  .chars .sp{width:48px;height:48px}.chars figcaption{font-size:10.5px;letter-spacing:-.06em}
   .touch{grid-template-columns:1fr}.demo{margin:0 auto}
   .tate{height:auto!important;writing-mode:horizontal-tb}
   .tate-h{writing-mode:horizontal-tb;font-size:24px}
@@ -410,14 +467,14 @@ body.locked{overflow:hidden}
     <h1 id="gateTitle">ページを開く前に、ひとこと</h1>
     <div class="msg">
       <p>このページは、1980年代の昭和のゲーム雑誌にインスパイアされた、ちょっとしたシャレで作った「APATT通信」です。</p>
-      <p>これまでのAPATTやAiPoSのことを、AIといっしょに、昭和のゲーム雑誌の雰囲気でまとめてみました。</p>
+      <p>これまでのAPATTのことを、AIといっしょに、昭和のゲーム雑誌の雰囲気でまとめてみました。</p>
       <p>令和の今、2026年の雰囲気とはずいぶん違う、なつかしい誌面になっています。作った本人も、正直ちょっと照れくさいのですが……。</p>
       <p>細かいことは大目に見ていただき、あの頃の世界にどっぷり浸って楽しんでもらえたらうれしいです。</p>
     </div>
     <div class="mini" id="mini" role="button" tabindex="0" aria-label="小さな誌面を開く">
       <div class="book">
         <div class="pg"><img src="a/mini_light.jpg" alt=""></div>
-        <div class="leaf"><div class="front"><img src="a/mini_cover.jpg" alt=""></div><div class="back"><img src="a/mini_toc.jpg" alt=""></div></div>
+        <div class="leaf"><div class="front"><img src="a/mini_cover.jpg?v=261110" alt=""></div><div class="back"><img src="a/mini_toc.jpg?v=261111" alt=""></div></div>
       </div>
       <p class="hint">押すと、ちょっとだけ開きます</p>
     </div>
@@ -439,20 +496,20 @@ body.locked{overflow:hidden}
 <section class="page cover" id="cover">
   <div class="top">
     <div class="logo"><span class="tall"><span class="nw">APATT</span><span class="nw">通信</span></span><small>アパティーティーつうしん</small></div>
-    <div class="issue">創刊号<b>No.1</b>2026年10月</div>
+    <div class="issue">創刊号<b>No.1</b>2026年11月</div>
   </div>
   <div class="body">
     <div class="crt tv"><video src="a/skin_cyber.mp4" poster="a/skin_cyber_p.jpg" autoplay muted loop playsinline></video></div>
     <div class="blurbs">
       <div class="blurb">大特集‼︎ <em>スキンに明かりがついた！</em></div>
       <div class="blurb b2">おまたせ‼︎ <em>Windows</em>にも上陸</div>
-      <div class="blurb b3">新作ゲーム <em>AiPoS</em> App Storeに登場</div>
+      <div class="blurb b3">新作ゲーム <em>AiPoS</em> まもなく App Storeに登場</div>
       <div class="blurb b4">☕で<em>しょうぎ</em>！？ 大会をのぞいてみた</div>
     </div>
     <span class="star" style="right:24px;bottom:20px">★</span>
     <span class="star" style="left:46%;top:6px;font-size:28px;animation-duration:4s">★</span>
   </div>
-  <div class="ticker"><span>★ APATT通信 創刊号 ★ スキンに明かりがついた‼︎ ★ Windowsにも上陸 ★ AiPoS ついにひとり立ち ★ ☕でしょうぎ大会 ★ 作者に突撃インタビュー ★</span></div>
+  <div class="ticker"><span>★ APATT通信 創刊号 ★ スキンに明かりがついた‼︎ ★ Windowsにも上陸 ★ AiPoS まもなくひとり立ち ★ ☕でしょうぎ大会 ★</span></div>
   <div class="parade" aria-hidden="true">
     <div class="sp hop"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div>
     <div class="sp hop" style="animation-delay:.1s"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div>
@@ -472,17 +529,16 @@ body.locked{overflow:hidden}
       <div class="sp" style="width:64px;height:64px"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div>
       <div class="say">もくじ〜！</div>
     </div>
-    <div class="issue" style="transform:none">2026<b style="font-size:30px">Oct.</b>創刊号</div>
+    <div class="issue" style="transform:none">2026<b style="font-size:30px">Nov.</b>創刊号</div>
   </div>
   <ol>
     <li class="big" style="grid-column:1/-1"><span class="p">3</span><a href="#light" style="color:var(--pink2)"><small style="color:var(--ink)">押して、照らして、うっとり。大特集</small><b>スキンのライトアップ大研究</b></a></li>
     <li><span class="p">4</span><a href="#win" style="color:var(--green)"><small style="color:var(--ink)">ずっと言われてた、あれが来た！</small><b>Windowsにも上陸</b></a></li>
     <li><span class="p">5</span><a href="#news" style="color:#7a4fd0"><small style="color:var(--ink)">ちいさいけど、うれしい</small><b>APATTかわら版</b></a></li>
-    <li><span class="p">6</span><a href="#aipos" style="color:var(--red)"><small style="color:var(--ink)">新作ゲーム情報</small><b>AiPoS(アイポス)</b></a></li>
-    <li><span class="p">7</span><a href="#interview" style="color:#7a4fd0"><small style="color:var(--ink)">生みの親に聞いてきた</small><b>作者に突撃インタビュー</b></a></li>
-    <li><span class="p">8</span><a href="#shogi" style="color:var(--orange)"><small style="color:var(--ink)">コーヒーブレイクで</small><b>しょうぎ大会</b></a></li>
-    <li><span class="p">9</span><a href="#coffee" style="color:#8a5a2b"><small style="color:var(--ink)">作業のあいまに、ひと休み</small><b>コーヒーブレイクのすすめ</b></a></li>
-    <li><span class="p">10</span><a href="#letters" style="color:var(--cyan)"><small style="color:var(--ink)">キミの声をまってるぞ</small><b>おたより・次号予告</b></a></li>
+    <li><span class="p">6</span><a href="#coffee" style="color:#8a5a2b"><small style="color:var(--ink)">☕コーヒーブレイク特集</small><b><span style="white-space:nowrap">コーヒーブレイク</span><wbr><span style="white-space:nowrap">のすすめ</span></b></a></li>
+    <li><span class="p">7</span><a href="#shogi" style="color:var(--orange)"><small style="color:var(--ink)">☕特集 その1</small><b>しょうぎ大会</b></a></li>
+    <li><span class="p">8</span><a href="#aipos" style="color:var(--red)"><small style="color:var(--ink)">☕特集 その2・新作ゲーム情報</small><b>AiPoS(アイポス)</b></a></li>
+    <li><span class="p">9</span><a href="#letters" style="color:var(--cyan)"><small style="color:var(--ink)">キミの声をまってるぞ</small><b>おたより・次号予告</b></a></li>
   </ol>
   <span class="no r">2</span>
 </section>
@@ -573,102 +629,38 @@ body.locked{overflow:hidden}
   <span class="no r">5</span>
 </section>
 
-<!-- ===== 新作ゲーム AiPoS ===== -->
-<section class="page game" id="aipos">
-  <div class="ribbon">★ 新作ゲーム情報 ★</div>
-  <div class="hero">
-    <div>
-      <img class="biglogo pop" src="a/aipos_logo.png" alt="AiPoS">
-      <div class="yomi"><span class="band">アイポス</span></div>
-    </div>
-    <div class="debut pop">
-      <div class="d1">新登場</div>
-      <div class="d2">ついに<br>ひとり立ち‼︎</div>
-      <div class="d3">App StoreからiPhoneの<br>ゲームアプリとして単独デビュー</div>
-      <div class="d4">10面まで無料</div>
-    </div>
-  </div>
-  <div class="mid">
-    <div><div class="phone pop" data-play="aipos"><video src="a/aipos_play.mp4" poster="a/aipos_play_p.jpg" autoplay muted loop playsinline></video></div><p class="cap playhint">さわると、ちょっとだけ遊べるぞ！</p></div>
+<!-- ===== コーヒーブレイク ===== -->
+<section class="page coffee" id="coffee">
+  <span class="band" style="background:#8a5a2b">☕コーヒーブレイク特集</span>
+  <div class="ctitle">☕コーヒーブレイク<br><span>のすすめ</span></div>
+  <div class="cgrid">
     <div class="pair" style="display:flex;gap:14px">
-      <div class="tate-h vh">同じ子を見つけて<br>すくい出せ‼︎</div>
-      <p class="tate" style="margin:0">これまではAPATTの☕の中でしか会えなかったアイポスが、ついにiPhoneのアプリとしてひとり立ちした。ルールはかんたん。左上に出ている子と同じ子を見つけて、指でタップ。テンポよく続ければチェインがつながり、星にさわればフィーバータイムだ。ピクト姫と8人のなかまが、全256面でキミを待っている。</p>
+      <div class="tate-h" style="background:var(--yellow);border:3px solid var(--ink)">耳を<br>ひと休み‼︎</div>
+      <p class="tate" style="height:21em;margin:0">音を作っていると、耳はだんだん慣れてしまう。同じところを何度も聴くうちに、いいのか悪いのか、わからなくなることもある。そんな時は、いったん手を止めてひと息。APATTの☕を押すと、コーヒーブレイクのはじまりだ。しょうぎを一局指したり、アイポスで遊んだり。少し休んで戻ってくれば、耳はまた新しい気持ちで音を聴けるはず。がんばるキミのための、小さな休けい室なのだ。</p>
     </div>
-    <div style="position:relative;width:150px;height:160px"><div class="burst" style="position:relative;width:150px;height:150px">フィーバー<br>タイム<br>だ‼︎</div></div>
-  </div>
-  <div class="shots six">
-    <figure><span class="num">1</span><div class="crt"><img src="a/ap1.jpg" alt=""></div><figcaption class="cap">10面スタート！ 左上の子をさがせ</figcaption></figure>
-    <figure><span class="num">2</span><div class="crt"><img src="a/ap2.jpg" alt=""></div><figcaption class="cap">星にさわってフィーバー。上が虹色に</figcaption></figure>
-    <figure><span class="num">3</span><div class="crt"><img src="a/ap3.jpg" alt=""></div><figcaption class="cap">残りの数字がへるたびドキドキ</figcaption></figure>
-    <figure><span class="num">4</span><div class="crt"><img src="a/ap4.jpg" alt=""></div><figcaption class="cap">つなげるほど地面に絵があらわれる</figcaption></figure>
-    <figure><span class="num">5</span><div class="crt"><video src="a/king.mp4" poster="a/king_p.jpg" autoplay muted loop playsinline></video></div><figcaption class="cap">フィーバー中にポスを重ねると、キングポスたんじょう！ 長押しでためて、いっきにすいこめ</figcaption></figure>
-    <figure><span class="num">6</span><div class="crt"><img src="a/ap6.jpg" alt=""></div><figcaption class="cap">採点でメダル。自己ベストでRECORD！</figcaption></figure>
-  </div>
-  <div class="facts2">
-    <span>★ 全256面</span><span>★ 世界ランキング</span><span>★ タイムアタック</span><span>★ 広告なし</span>
-  </div>
-  <div class="peek">
-    <div class="hole"><div class="lens"><video src="a/great.mp4" poster="a/great_p.jpg" autoplay muted loop playsinline></video></div></div>
-    <div>
-      <div class="peekq">キミはこれを<br>見たことがあるか！？</div>
-      <p class="cap">うまくいった時にだけ見られる、とっておきの演出。どうすれば出るのかは……自分の指でたしかめてくれ！</p>
-      <div class="store"><a class="go" id="storeBtn" href="#">App Storeで見る ▶</a><span class="cap" id="storeNote"></span></div>
+    <div class="menu">
+      <div class="mhead">きょうのメニュー</div>
+      <ul>
+        <li><a href="#shogi"><b>しょうぎ</b><span>はがきが届いたら、大会へ</span><i>その1 ▶ 7ページ</i></a></li>
+        <li><a href="#aipos"><b>アイポス</b><span>同じ子を見つけて、すくい出せ</span><i>その2 ▶ 8ページ</i></a></li>
+      </ul>
+      <p class="cap" style="margin:8px 0 0">どちらも、APATTの画面の中でそのまま遊べるぞ</p>
     </div>
   </div>
-  <div class="chars">
-    <div class="tab">登場キャラたち</div>
-    <div class="list">
-      <figure><div class="sp"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div><figcaption style="color:#2a6fd6">キャプテン・アス</figcaption></figure>
-      <figure><div class="sp"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div><figcaption style="color:#d1408a">メロでぃ</figcaption></figure>
-      <figure><div class="sp"><img src="a/oji_front1.gif" alt=""><img src="a/oji_front2.gif" alt=""></div><figcaption style="color:#c08a00">プルタブ王子</figcaption></figure>
-      <figure><div class="sp"><img src="a/neko_front1.gif" alt=""><img src="a/neko_front2.gif" alt=""></div><figcaption style="color:#e8232f">ネコ耳ライダー</figcaption></figure>
-      <figure><div class="sp"><img src="a/pano_front1.gif" alt=""><img src="a/pano_front2.gif" alt=""></div><figcaption style="color:#a0661a">パンお</figcaption></figure>
-      <figure><div class="sp"><img src="a/honya_front1.gif" alt=""><img src="a/honya_front2.gif" alt=""></div><figcaption style="color:#6b6b6b">ほんお</figcaption></figure>
-      <figure><div class="sp"><img src="a/succer_front1.gif" alt=""><img src="a/succer_front2.gif" alt=""></div><figcaption style="color:#1f9d55">さッカー</figcaption></figure>
-      <figure><div class="sp"><img src="a/tabizuki_front1.gif" alt=""><img src="a/tabizuki_front2.gif" alt=""></div><figcaption style="color:#2b8fbf">たび好きテツ</figcaption></figure>
+  <div class="where">
+    <div class="wscreen"><img src="a/cup_full.jpg" alt="APATTの画面"><span class="mark" style="left:94.4%;top:98.7%"></span></div>
+    <div class="wside">
+      <div class="whead">☕は<br>ココだ！</div>
+      <div class="row"><div class="lens"><img src="a/cup_full.jpg" alt="" style="width:1210px;height:auto;max-width:none;position:absolute;left:-1087px;top:-990px"></div>
+      <p class="cap" style="margin:0">APATTの画面の右下、キーボードのマークのとなりにある、小さなカップ。これを押すとコーヒーブレイクのはじまりだ！</p></div>
     </div>
   </div>
   <span class="no l">6</span>
 </section>
 
-<div class="walk" aria-hidden="true" style="margin:-22px 0 0;box-shadow:0 10px 30px rgba(0,0,0,.45)">
-  <div class="sp" style="animation-delay:0s"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-1.6s"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-3.2s"><img src="a/pano_front1.gif" alt=""><img src="a/pano_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-4.8s"><img src="a/succer_front1.gif" alt=""><img src="a/succer_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-6.4s"><img src="a/neko_front1.gif" alt=""><img src="a/neko_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-8s"><img src="a/oji_front1.gif" alt=""><img src="a/oji_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-9.6s"><img src="a/honya_front1.gif" alt=""><img src="a/honya_front2.gif" alt=""></div>
-  <div class="sp" style="animation-delay:-11.2s"><img src="a/tabizuki_front1.gif" alt=""><img src="a/tabizuki_front2.gif" alt=""></div>
-</div>
-
-<!-- ===== 作者に突撃インタビュー ===== -->
-<section class="page iv" id="interview">
-  <div class="ivhead">
-    <div class="burst" style="position:relative;width:130px;height:130px;font-size:18px">突撃‼︎</div>
-    <div>
-      <div class="ivsub">AiPoSの生みの親に聞いてきた</div>
-      <h2 class="ivtitle">作者に突撃インタビュー</h2>
-    </div>
-  </div>
-  <div class="qa">
-    <div class="q"><b>Q</b>AiPoSって、どうやって生まれたんですか？</div>
-    <div class="a"><b>A</b>はじまりは2009年です。iPhoneが出てきて、これでゲームを作りたいと思ったのがきっかけでした。AiPoSという名前も、そのころからずっと使っています。キャラクターを描いて、町を描いて、マンガまで描きました。でも、そのときは形にしきれなかったんです。ずっと心に残っていた夢でした。</div>
-    <div class="q"><b>Q</b>画面がちょっと小さめですね？</div>
-    <div class="a"><b>A</b>320×480。2009年のiPhoneと同じ大きさです。2009年の夢を、2009年の画面のまま出したかったんです。ファミコンにも256×240という決まりがありましたよね。決まりの中で作るのが楽しいんです。</div>
-    <div class="q"><b>Q</b>とにかく、むずかしい！</div>
-    <div class="a"><b>A</b>面が進むほど、どんどん難しくなる。正直、クリアさせようとは思ってない(笑)。256面は、キミの挑戦を待ってる。ファミコンってそうだったでしょ。</div>
-    <div class="q"><b>Q</b>曲には、どんな思いがありますか？</div>
-    <div class="a"><b>A</b>メインテーマは「HERO」というオリジナル楽曲です。AiPoSの中には、ファミコンと同じ4つの音を鳴らす仕組みが入っていて、曲も効果音もぜんぶそれで鳴らしています。あの4つの音だけで、ちゃんと胸が熱くなる曲にしたかったんです。この音の仕組みは、近いうちに「昭和ゲーム音源」という形で、ソフトシンセとして出そうと思っています。</div>
-    <div class="q"><b>Q</b>最後に、ひとこと！</div>
-    <div class="a"><b>A</b>ここまで読んでいただき、本当にありがとうございます。APATTもAiPoSも、子どものころに夢中になったものを思い出しながら、ひとつずつ作っています。まだまだ足りないところばかりですが、使ってみて、遊んでみて、何か感じたことがあれば、おたよりで教えていただけたらうれしいです。これからも、どうぞよろしくお願いいたします。</div>
-  </div>
-  <img class="sign" src="a/sign.png" alt="APAZZI" style="margin-top:6px">
-  <span class="no r">7</span>
-</section>
-
 <!-- ===== しょうぎ ===== -->
 <section class="page shogi" id="shogi">
+  <div class="cbtag">☕コーヒーブレイク特集 その1</div>
   <div><span class="koma">王</span><span class="koma">飛</span><span class="koma">角</span><span class="koma">金</span><span class="koma">銀</span></div>
   <div class="shead">
     <div class="title">☕<span class="de">で</span>しょうぎ！？</div>
@@ -691,37 +683,86 @@ body.locked{overflow:hidden}
     <figure><span class="num">3</span><div class="crt" style="aspect-ratio:220/440"><img src="a/sg3.jpg" alt=""></div><figcaption class="cap">トーナメント表。決勝まで勝ちすすめ</figcaption></figure>
     <figure><span class="num">4</span><div class="crt" style="aspect-ratio:220/440"><img src="a/sg4.jpg" alt=""></div><figcaption class="cap">いざ対局。見物の子たちも真剣だ</figcaption></figure>
   </div>
-  <span class="no r">8</span>
+  <span class="no r">7</span>
 </section>
 
-<!-- ===== コーヒーブレイク ===== -->
-<section class="page coffee" id="coffee">
-  <span class="band" style="background:#8a5a2b">作業のあいまに</span>
-  <div class="ctitle">☕コーヒーブレイク<br><span>のすすめ</span></div>
-  <div class="cgrid">
+<!-- ===== 新作ゲーム AiPoS ===== -->
+<section class="page game" id="aipos">
+  <div class="ribbon">☕コーヒーブレイク特集 その2 ★ 新作ゲーム情報</div>
+  <div class="hero">
+    <div>
+      <img class="biglogo pop" src="a/aipos_logo.png" alt="AiPoS">
+      <div class="yomi"><span class="band">アイポス</span></div>
+    </div>
+    <div class="debut pop">
+      <div class="d1">まもなく</div>
+      <div class="d2">ついに<br>ひとり立ち‼︎</div>
+      <div class="d3">App StoreからiPhoneの<br>ゲームアプリとして単独デビュー</div>
+      <div class="d4">10面まで無料</div>
+    </div>
+  </div>
+  <div class="mid">
+    <div><div class="phone pop" data-play="aipos"><video src="a/aipos_play.mp4?v=261110" poster="a/aipos_play_p.jpg?v=261110" autoplay muted loop playsinline></video></div><p class="cap playhint">さわると、ちょっとだけ遊べるぞ！</p></div>
     <div class="pair" style="display:flex;gap:14px">
-      <div class="tate-h" style="background:var(--yellow);border:3px solid var(--ink)">耳を<br>ひと休み‼︎</div>
-      <p class="tate" style="height:21em;margin:0">音を作っていると、耳はだんだん慣れてしまう。同じところを何度も聴くうちに、いいのか悪いのか、わからなくなることもある。そんな時は、いったん手を止めてひと息。APATTの☕を押すと、コーヒーブレイクのはじまりだ。アイポスで遊んだり、しょうぎを一局指したり。少し休んで戻ってくれば、耳はまた新しい気持ちで音を聴けるはず。がんばるキミのための、小さな休けい室なのだ。</p>
+      <div class="tate-h vh">同じ子を見つけて<br>すくい出せ‼︎</div>
+      <p class="tate" style="margin:0">これまではAPATTの☕の中でしか会えなかったアイポスが、ついにiPhoneのアプリとしてひとり立ちする。ルールはかんたん。左上に出ている子と同じ子を見つけて、指でタップ。テンポよく続ければチェインがつながり、星にさわれば時間が止まる。そのすきに同じ子を重ねて、ポスをつくれ！ピクト姫と8人のなかまが、全256面でキミを待っている。</p>
     </div>
-    <div class="menu">
-      <div class="mhead">きょうのメニュー</div>
-      <ul>
-        <li><b>アイポス</b><span>同じ子を見つけて、すくい出せ</span></li>
-        <li><b>しょうぎ</b><span>はがきが届いたら、大会へ</span></li>
-      </ul>
-      <p class="cap" style="margin:8px 0 0">どちらも、APATTの画面の中でそのまま遊べるぞ</p>
-    </div>
-  </div>
-  <div class="where">
-    <div class="wscreen"><img src="a/cup_full.jpg" alt="APATTの画面"><span class="mark" style="left:94.4%;top:98.7%"></span></div>
-    <div class="wside">
-      <div class="whead">☕は<br>ココだ！</div>
-      <div class="row"><div class="lens"><img src="a/cup_full.jpg" alt="" style="width:1210px;height:auto;max-width:none;position:absolute;left:-1087px;top:-990px"></div>
-      <p class="cap" style="margin:0">APATTの画面の右下、キーボードのマークのとなりにある、小さなカップ。これを押すとコーヒーブレイクのはじまりだ！</p></div>
+    <div class="bwrap" style="position:relative;width:150px;height:160px"><div class="burst" style="position:relative;width:150px;height:150px">キング<br>ポスを<br>つくれ‼︎</div>
+      <div class="cutz">
+        <p class="cap c1">これがキングポス。ながおしでためると、足もとから虹色に変わるぞ‼︎</p>
+        <p class="cap c2">水色のまるいのがポス。同じ子を重ねると生まれて、ポスを重ねるとキングポスになる</p>
+        <div class="oct"><video src="a/cut_king.mp4?v=261111" poster="a/cut_king_p.jpg?v=261111" autoplay muted loop playsinline></video></div>
+        <div class="lensk"><img src="a/cut_pos.jpg?v=261111" alt="ポス"></div>
+        <span class="tag t1">キングポス</span>
+        <span class="tag t2">ポス</span>
+      </div>
     </div>
   </div>
-  <span class="no l">9</span>
+  <div class="shots six">
+    <figure><span class="num">1</span><div class="crt"><img src="a/ap1.jpg?v=261110" alt=""></div><figcaption class="cap">左上にならぶのが、すくう順番。先頭の子をさがしてタップだ</figcaption></figure>
+    <figure><span class="num">2</span><div class="crt"><img src="a/ap2.jpg?v=261110" alt=""></div><figcaption class="cap">テンポよく続けばCHAIN‼︎ 時計が虹色になって、星が飛び出す</figcaption></figure>
+    <figure><span class="num">3</span><div class="crt"><img src="a/ap3.jpg?v=261110" alt=""></div><figcaption class="cap">星にさわると時間が止まる。同じ子を重ねると……ポスになった！</figcaption></figure>
+    <figure><span class="num">4</span><div class="crt"><img src="a/ap4.jpg?v=261110" alt=""></div><figcaption class="cap">時間が動き出したら、画面はもうこんなにスッキリ！</figcaption></figure>
+    <figure><span class="num">5</span><div class="crt"><video src="a/king.mp4?v=261110" poster="a/king_p.jpg?v=261110" autoplay muted loop playsinline></video></div><figcaption class="cap">ポスを重ねればキングポス。長押しでためて……はなせ‼︎</figcaption></figure>
+    <figure><span class="num">6</span><div class="crt"><img src="a/ap6.jpg?v=261110" alt=""></div><figcaption class="cap">一人残らずすくってクリア‼︎ 自己ベストならRECORDだ</figcaption></figure>
+  </div>
+  <div class="facts2">
+    <span>★ 全256面</span><span>★ 世界ランキング</span><span>★ タイムアタック</span><span>★ 広告なし</span>
+  </div>
+  <div class="peek">
+    <div class="hole"><div class="lens"><video src="a/great.mp4?v=261110" poster="a/great_p.jpg?v=261110" autoplay muted loop playsinline></video></div></div>
+    <div>
+      <div class="peekq">キミはこれを<br>見たことがあるか！？</div>
+      <p class="cap">うまくいった時にだけ見られる、とっておきの演出。どうすれば出るのかは……自分の指でたしかめてくれ！</p>
+      <div class="store"><a class="go" id="storeBtn" href="#">App Storeで見る ▶</a><span class="cap" id="storeNote"></span></div>
+    </div>
+  </div>
+  <div class="chars">
+    <div class="tab">登場キャラたち</div>
+    <div class="list">
+      <figure><div class="sp"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div><figcaption style="color:#2a6fd6">キャプテン・アス</figcaption></figure>
+      <figure><div class="sp"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div><figcaption style="color:#d1408a">メロでぃ</figcaption></figure>
+      <figure><div class="sp"><img src="a/oji_front1.gif" alt=""><img src="a/oji_front2.gif" alt=""></div><figcaption style="color:#c08a00">プルタブ王子</figcaption></figure>
+      <figure><div class="sp"><img src="a/neko_front1.gif" alt=""><img src="a/neko_front2.gif" alt=""></div><figcaption style="color:#e8232f">ネコ耳ライダー</figcaption></figure>
+      <figure><div class="sp"><img src="a/pano_front1.gif" alt=""><img src="a/pano_front2.gif" alt=""></div><figcaption style="color:#a0661a">パンお</figcaption></figure>
+      <figure><div class="sp"><img src="a/honya_front1.gif" alt=""><img src="a/honya_front2.gif" alt=""></div><figcaption style="color:#6b6b6b">ほんお</figcaption></figure>
+      <figure><div class="sp"><img src="a/succer_front1.gif" alt=""><img src="a/succer_front2.gif" alt=""></div><figcaption style="color:#1f9d55">さッカー</figcaption></figure>
+      <figure><div class="sp"><img src="a/tabizuki_front1.gif" alt=""><img src="a/tabizuki_front2.gif" alt=""></div><figcaption style="color:#2b8fbf">たび好きテツ</figcaption></figure>
+    </div>
+  </div>
+  <span class="no l">8</span>
 </section>
+
+<div class="walk" aria-hidden="true" style="margin:-22px 0 0;box-shadow:0 10px 30px rgba(0,0,0,.45)">
+  <div class="sp" style="animation-delay:0s"><img src="a/akii_front1.gif" alt=""><img src="a/akii_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-1.75s"><img src="a/melody_front1.gif" alt=""><img src="a/melody_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-3.5s"><img src="a/pano_front1.gif" alt=""><img src="a/pano_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-5.25s"><img src="a/succer_front1.gif" alt=""><img src="a/succer_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-7s"><img src="a/neko_front1.gif" alt=""><img src="a/neko_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-8.75s"><img src="a/oji_front1.gif" alt=""><img src="a/oji_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-10.5s"><img src="a/honya_front1.gif" alt=""><img src="a/honya_front2.gif" alt=""></div>
+  <div class="sp" style="animation-delay:-12.25s"><img src="a/tabizuki_front1.gif" alt=""><img src="a/tabizuki_front2.gif" alt=""></div>
+</div>
 
 <!-- ===== おたより ===== -->
 <section class="page letters" id="letters">
@@ -729,8 +770,8 @@ body.locked{overflow:hidden}
     <div class="postcard">
       <h3>おたより大募集‼︎</h3>
       <p style="margin:0 0 10px;font-weight:700">こんな色のスキンがほしい、こんな使い方を見つけた、AiPoSで何面まで行った……。なんでも送ってね。次の号で紹介するかも！？</p>
-      <a class="go" href="mailto:apatt@kurashin.co?subject=APATT%E9%80%9A%E4%BF%A1%E3%81%B8%E3%81%AE%E3%81%8A%E3%81%9F%E3%82%88%E3%82%8A">おたよりを送る ✉</a>
-      <p class="cap" style="margin:10px 0 0">押すとキミのメールのアプリが開くよ。あて先はapatt@kurashin.co</p>
+      <button type="button" class="go copymail" data-mail="apatt@kurashin.co">あて先をコピー ✉</button>
+      <p class="cap" style="margin:10px 0 0">押すとあて先のapatt@kurashin.coがコピーされるよ。キミのメールに貼りつけて送ってね</p>
       <div class="orx"><span>または</span></div>
       <a class="go xbtn" href="https://x.com/intent/post?text=%0A%0A%23APATT%E9%80%9A%E4%BF%A1%20%23APATT" target="_blank" rel="noopener">Xでポストする 𝕏</a>
       <p class="cap" style="margin:10px 0 0">ハッシュタグ <b>#APATT通信</b> をつけてポストしてね！</p>
@@ -741,18 +782,25 @@ body.locked{overflow:hidden}
       <p style="margin:0;font-weight:700">何が出るかは、まだヒミツ。おたのしみに！</p>
     </div>
   </div>
+  <div class="licname">
+    <h3><span style="white-space:nowrap">ライセンスの名前、</span><wbr><span style="white-space:nowrap">変えられます</span></h3>
+    <div class="licshot"><img src="a/lic_name.jpg?v=261111b" alt="APATTの画面の上のLicensed to:の名前"><span class="ring"></span></div>
+    <p>APATTの画面の上に出る「Licensed to:」の名前。会社名やアーティスト名にしたくなったら、気軽に知らせてね。買った時のメールアドレスから、新しい名前を書いて送ってくれれば、その名前のライセンスをお届けします。</p>
+    <button type="button" class="go copymail" data-mail="apatt@kurashin.co">あて先をコピー ✉</button>
+    <p class="cap" style="margin:8px 0 0">押すとあて先のapatt@kurashin.coがコピーされるよ</p>
+  </div>
   <div class="signrow">
     <a class="xicon" href="https://x.com/APAZZI_SKK47" target="_blank" rel="noopener" aria-label="APAZZIのX"><img src="a/apazzi_icon.jpg" alt=""><span>𝕏</span></a>
     <img class="sign" src="a/sign.png" alt="APAZZI">
   </div>
-  <p class="colophon">APATT通信 No.1(創刊号)2026年10月 発行・APAZZI ／ APATTの最新情報は <a href="https://apazzi-jpn.github.io/apatt-site/">APATTのサイト</a> と <a href="https://x.com/APAZZI_SKK47">X</a> で。<br>この通信は、APATTを使ってくれている人に送っています。</p>
-  <span class="no r">10</span>
+  <p class="colophon">APATT通信 No.1(創刊号)2026年11月 発行・APAZZI ／ APATTの最新情報は <a href="https://apazzi-jpn.github.io/apatt-site/">APATTのサイト</a> と <a href="https://x.com/APAZZI_SKK47">X</a> で。<br>この通信は、APATTを使ってくれている人に送っています。</p>
+  <span class="no r">9</span>
 </section>
 
 </main>
 <script>
 // AiPoS の App Store の番号(ASC の「App 情報」の Apple ID)。空のうちはボタンを「まもなく登場」にしておく(261104 審査通過・棚に並んだ)
-const AIPOS_APP_ID = '6804922088';
+const AIPOS_APP_ID = '';   // 261110 App Store にまだ出ていない(6804922088 は 404)→「まもなく」に戻す
 (() => {
   const a = document.getElementById('storeBtn'), n = document.getElementById('storeNote');
   if (AIPOS_APP_ID) { a.href = 'https://apps.apple.com/jp/app/id' + AIPOS_APP_ID; a.target = '_blank'; a.rel = 'noopener'; }
@@ -785,7 +833,8 @@ const marks = [
   ['.peek','flyR'],
   ['.shots figure,.roster figure,.chars figure,.card,.qa>div,.toc li,.howto .row,.facts li','reveal'],
   ['.crt.tv,.monitor,.phone,.light .grid>div:first-child .crt,.postcard','flyL'],
-  ['.touch,.next,.info,.menu,.where','flyR']
+  ['.touch,.next,.info,.menu,.where','flyR'],
+  ['.cutz .oct,.cutz .lensk','cutpop']
 ];
 const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold:.15});
 marks.forEach(([q, c]) => document.querySelectorAll(q).forEach((el, i) => {
@@ -861,6 +910,23 @@ marks.forEach(([q, c]) => document.querySelectorAll(q).forEach((el, i) => {
   })();
 })();
 </script>
-<script src="a/play.js"></script>
+<script src="a/play.js?v=261110"></script>
+<script>
+// 261111 社長「押してメーラーが出るのは違う」: 押すとあて先をコピー(コピーできない時はアドレスを選んだ状態で見せる)
+document.querySelectorAll('.copymail').forEach(b => {
+  const label = b.textContent;
+  b.addEventListener('click', async () => {
+    const m = b.dataset.mail;
+    let ok = false;
+    try { await navigator.clipboard.writeText(m); ok = true; } catch (e) {
+      const t = document.createElement('textarea'); t.value = m; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.append(t); t.select();
+      try { ok = document.execCommand('copy'); } catch (e2) {} t.remove();
+    }
+    b.textContent = ok ? 'コピーしたよ！ ✓' : m;
+    b.classList.toggle('done', ok);
+    clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = label; b.classList.remove('done'); }, 1800);
+  });
+});
+</script>
 </body>
 </html>

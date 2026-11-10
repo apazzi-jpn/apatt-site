@@ -242,7 +242,24 @@ function attach(ph){const kind=ph.dataset.play,vid=ph.querySelector('video');
  vid.addEventListener('click',()=>show());
  ph.addEventListener('pointerup',e=>{if(e.pointerType!=='mouse'&&!playing&&e.target===vid)show();});
  ask.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.stopPropagation();hide();
-  if(b.dataset.a==='1'){playing=true;vid.pause();vid.hidden=true;cv.hidden=false;ph.classList.add('playing');
+  if(b.dataset.a==='1'){if(kind==='aipos'){openWeb();return;}
+   playing=true;vid.pause();vid.hidden=true;cv.hidden=false;ph.classList.add('playing');
    if(!game)game=Aipos(cv,close);game.start();}});}
+
+// ===================================================================== ブラウザ版 AiPoS(261110)
+// 本物の ゲーム(src/AiPoSGame.h を WebAssembly に)を そのまま 窓で ひらく。a/aipos_web/ は ブラウザ体験版の 配る版(out)の 写し
+function openWeb(){
+ if(document.querySelector('.aiposweb'))return;
+ const ov=document.createElement('div');ov.className='aiposweb dot';
+ ov.innerHTML='<div class="awbox"><button class="awclose" type="button">とじる ×</button><div class="awscr"><p class="awload">よみこみちゅう…</p><iframe title="AiPoS" src="a/aipos_web/index.html?v=2709747" allow="autoplay; fullscreen"></iframe></div></div>';
+ const fr=ov.querySelector('iframe'),scr=ov.querySelector('.awscr');
+ const R=504/320,fit=()=>{const h=Math.min(innerHeight-84,1008),w=Math.min(innerWidth-24,h/R);scr.style.width=Math.round(w)+'px';scr.style.height=Math.round(w*R)+'px';};   // 絵 320x480+上の縁 24(↺ ♪ 📱)
+ const shut=()=>{removeEventListener('resize',fit);removeEventListener('keydown',esc);fr.src='about:blank';ov.remove();document.documentElement.classList.remove('awopen');};
+ const esc=e=>{if(e.key==='Escape'&&document.activeElement!==fr)shut();};
+ fr.addEventListener('load',()=>{if(fr.src!=='about:blank'){ov.querySelector('.awload').hidden=true;try{fr.focus();}catch(_){}}});
+ ov.querySelector('.awclose').addEventListener('click',shut);
+ ov.addEventListener('click',e=>{if(e.target===ov)shut();});
+ addEventListener('resize',fit);addEventListener('keydown',esc);fit();
+ document.documentElement.classList.add('awopen');document.body.appendChild(ov);}
 document.querySelectorAll('.phone[data-play]').forEach(attach);
 })();

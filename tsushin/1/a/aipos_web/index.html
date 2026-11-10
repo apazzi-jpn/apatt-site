@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>AiPoS</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  #wrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  #bar{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;touch-action:none}
+  canvas{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000}
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="bar"></canvas><canvas id="c"></canvas></div>
+<script src="aipos.js"></script>
+<script>
+// AiPoS web 体験版(261109)。ゲームは C++(src/AiPoSGame.h)を そのまま WebAssembly に。ここは 窓・指・音を つなぐだけ
+(async () => {
+  const W = 320, H = 480;              // ゲームの 絵 そのもの(1 ドット = 1 画素)。拡大は 下で 画面の 画素の 整数倍に
+  const cv = document.getElementById('c');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  // 261110 社長「ブラウザ版も ↺(タイトルへ)と ♪(音)を、絵の 外の 上の 黒い 縁の 右に 横に」= ゲームの 絵(320x480)は そのまま。上に 24 ドットの 帯
+  const BH = 24, bar = document.getElementById('bar'); bar.width = W; bar.height = BH; const bctx = bar.getContext('2d');
+  const fit = () => {
+    const dpr = window.devicePixelRatio || 1;
+    let s = Math.min(innerWidth / W, innerHeight / (H + BH));
+    const k = Math.floor(s * dpr);              // 画面の 画素で 整数倍(ドットの 大きさを そろえる)
+    if (k >= 4) s = k / dpr;                  // 小さい 画面は 整数に そろえず 画面いっぱい
+    cv.style.width = (W * s) + 'px'; cv.style.height = (H * s) + 'px';
+    bar.style.width = (W * s) + 'px'; bar.style.height = (BH * s) + 'px';
+  };
+  // 列と 同じ ドット絵(AiPoSGame.h の kColTitle・kColNote・斜線)。1 ドット = ゲームの 2 画素。入 = 白 / 切 = 灰 7b7b7b + 赤い 斜線 e7005a
+  const TITLE = ['.#.###..','.##...#.','.###...#','.......#','#......#','#......#','.#....#.','..####..'];
+  const NOTE = ['...#..','...##.','...###','...#.#','...#.#','.###..','####..','.##...'];
+  const PHONE = ['.#####.','#######','#.....#','#.....#','#.....#','#.....#','#.....#','#######','###.###','.#####.'];
+  // 261110 社長「パソコンの ブラウザで 開いたら スマホの QR が 要る(スマホで 開いたら 要らない)」= 指の 画面(pointer: coarse)では 📱 を 出さない
+  const HAS_PHONE = !(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+  const NB = HAS_PHONE ? 3 : 2;
+  const BOX = 10, PITCH = 13, D = 2;          // 箱 10 ドット・1 つぶん 13 ドット
+  const boxX = i => W - 4 - (BOX + (NB - 1 - i) * PITCH) * D;   // 0 = ↺ / 1 = ♪ / 2 = 📱(右の 端)
+  const BY = 2;
+  const dots = (rows, x0, y0, ix, iy, col) => { bctx.fillStyle = col; rows.forEach((r, y) => { for (let x = 0; x < r.length; x++) if (r[x] === '#') bctx.fillRect(x0 + (ix + x) * D, y0 + (iy + y) * D, D, D); }); };
+  let lastState = -1;
+  const drawBar = st => {
+    if (st === lastState) return; lastState = st;
+    bctx.fillStyle = '#000'; bctx.fillRect(0, 0, W, BH);
+    dots(TITLE, boxX(0), BY, 1, 1, (st & 2) ? '#7b7b7b' : '#ffffff');
+    const on = (st & 1) !== 0;
+    dots(NOTE, boxX(1), BY, 1, 1, on ? '#ffffff' : '#7b7b7b');
+    if (!on) { bctx.fillStyle = '#e7005a'; for (let k = 0; k < 10; k++) { const y = 1 + 8 - Math.floor(k * 10 / 10 + 0.5); bctx.fillRect(boxX(1) + k * D, BY + y * D, D, D); } }
+    if (HAS_PHONE) dots(PHONE, boxX(2), BY, 1, 0, (st & 4) ? '#58c470' : '#ffffff');   // QR を 出している 間は 緑(APATT の 列と 同じ)
+  };
+  addEventListener('resize', fit); fit();
+
+  const M = await AiPoSModule();
+  // 記録は ブラウザの 中(IndexedDB)に 残す
+  M.FS.mkdir('/aipos'); M.FS.mount(M.IDBFS, {}, '/aipos');
+  await new Promise(r => M.FS.syncfs(true, () => r()));
+  setInterval(() => M.FS.syncfs(false, () => {}), 3000);
+  addEventListener('pagehide', () => M.FS.syncfs(false, () => {}));
+
+  M._aw_init(W, H);
+  window.__aipos = M;   // 点検用(開発の 間だけ)
+  // キー: esc・矢印・字
+  const keyMap = { Escape: 27, Enter: 13, ' ': 32, Backspace: 8, Delete: 0x10000 + 46, ArrowUp: 0x10000 + 38, ArrowDown: 0x10000 + 40, ArrowLeft: 0x10000 + 37, ArrowRight: 0x10000 + 39, PageUp: 0x10000 + 33, PageDown: 0x10000 + 34, Home: 0x10000 + 36, End: 0x10000 + 35 };
+  addEventListener('keydown', e => {
+    let code = keyMap[e.key], ch = 0;
+    if (code === undefined && e.key.length === 1) { ch = e.key.codePointAt(0); code = e.key.toUpperCase().codePointAt(0); }
+    if (code === undefined) return;
+    M._aw_key(code, ch); e.preventDefault();
+  });
+  document.addEventListener('visibilitychange', () => M._aw_visible(document.hidden ? 0 : 1));
+  const img = ctx.createImageData(W, H);
+
+  bar.addEventListener('pointerdown', e => {
+    const r = bar.getBoundingClientRect(); const x = (e.clientX - r.left) * W / r.width;
+    for (let i = 0; i < NB; i++) if (x >= boxX(i) - 3 && x < boxX(i) + BOX * D + 3) {
+      if (i === 0) M._aw_btn_title();
+      else if (i === 1) M._aw_btn_sound();
+      else { const u = M.stringToNewUTF8(location.href.split('#')[0]); M._aw_btn_phone(u); M._free(u); }   // この ページの 住所を QR に
+      startAudio(); }
+    e.preventDefault(); });
+  // 指(マウスも 指も 同じ。1 本だけ)
+  const pos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * W / r.width, (e.clientY - r.top) * H / r.height]; };
+  let down = false, pid = -1;
+  cv.addEventListener('pointerdown', e => { if (down) return; down = true; pid = e.pointerId; cv.setPointerCapture(pid); const [x, y] = pos(e); M._aw_mouse(0, x, y); startAudio(); e.preventDefault(); });
+  cv.addEventListener('pointermove', e => { if (down && e.pointerId !== pid) return; const [x, y] = pos(e); M._aw_mouse(1, x, y); e.preventDefault(); });
+  const up = e => { if (! down || e.pointerId !== pid) return; down = false; const [x, y] = pos(e); M._aw_mouse(2, x, y); e.preventDefault(); };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  cv.addEventListener('contextmenu', e => e.preventDefault());
+
+  // 音(ゲームの ファミコンの 音源を そのまま。最初に 触った 時に 鳴らし始める = ブラウザの 決まり)
+  let ac = null;
+  function startAudio() {
+    if (ac) { if (ac.state !== 'running') ac.resume(); return; }
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    // 261110 社長「ブラウザ版 音 遅れてない?」= 1024 だと 押してから 鳴るまで 約 60ms(iPhone は 約 15ms)。256 = 約 5ms ぶんの 箱 → 約 20ms
+    //   スマホ(指の 画面)は 力が 弱いので 512(約 30ms)。?ab=数 で 試せる
+    const n = +(new URLSearchParams(location.search).get('ab') || (HAS_PHONE ? 256 : 512));
+    const sp = ac.createScriptProcessor(n, 0, 2);
+    window.__aiposLate = 0;
+    sp.onaudioprocess = ev => {
+      if (ev.playbackTime < ac.currentTime) window.__aiposLate++;   // 間に 合わなかった 箱(ぷつっ の もと)を 数える
+      const L = ev.outputBuffer.getChannelData(0), R = ev.outputBuffer.getChannelData(1);
+      const pl = M._aw_audio(n, ac.sampleRate) >> 2, pr = M._aw_audioR() >> 2;
+      L.set(M.HEAPF32.subarray(pl, pl + n)); R.set(M.HEAPF32.subarray(pr, pr + n));
+    };
+    sp.connect(ac.destination);
+    window.__aiposAudio = { ac, sp };   // 点検の 録画用(音も 一緒に)
+  }
+
+  // 261110 APATT通信 などで 外の ページの ボタンから 開いた 時は、もう 触って いるので すぐ 鳴らせる(だめなら 触った 時に)
+  try { startAudio(); if (ac && ac.state !== 'running') ac.resume().catch(() => {}); } catch (_) {}
+
+  // 1 コマ = ゲームの 時計(60 回/秒)→ 絵
+  function frame() {
+    M._aw_tick();
+    const p = M._aw_render();
+    img.data.set(M.HEAPU8.subarray(p, p + W * H * 4));
+    ctx.putImageData(img, 0, 0);
+    drawBar(M._aw_btn_state());
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
