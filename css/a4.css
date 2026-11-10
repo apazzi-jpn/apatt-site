@@ -812,7 +812,7 @@ html.win-ready [data-win="pre"]{display:none!important}
 /* アップデートの案内(261111 案): FastSpring のお客さん用ページへ。pkg を直接落とすリンクは置かない */
 .nw-upd{max-width:720px;margin:0 auto clamp(40px,5vw,60px);padding:clamp(22px,3vw,32px) clamp(18px,3vw,36px);text-align:center;
   border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--gold) 6%,transparent);scroll-margin-top:80px}
-.nu-k{font:800 12px/1 var(--font);letter-spacing:.14em;color:var(--gold);margin:0 0 10px}
+.nu-k{font:800 14.5px/1 var(--font);letter-spacing:.14em;color:var(--gold);margin:0 0 12px}
 .nu-h{font-size:clamp(20px,2.6vw,26px);font-weight:800;color:var(--text);margin:0 0 10px;line-height:1.4}
 .nu-p{color:var(--dim);font-size:clamp(14px,1.6vw,15.5px);line-height:1.8;margin:0 auto 16px}
 .nu-steps{list-style:none;padding:0;margin:0 auto 20px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;font-size:14px;color:var(--text)}
